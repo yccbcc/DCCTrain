@@ -1,0 +1,20 @@
+
+@import "/pages/common/electric/electric.wxss";
+
+/* tableView->Cell */
+#tableView{
+  margin-top: 25rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+#tableView text{
+  width: 60%;
+  text-align: center;
+  line-height: 80rpx;
+  height: 80rpx;
+  border: solid 8rpx black;
+  margin-top: 50rpx;
+  margin-bottom: 50rpx;
+}

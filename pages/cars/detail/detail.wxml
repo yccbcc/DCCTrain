@@ -1,0 +1,13 @@
+<!--pages/cars/detail/detail.wxml-->
+
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view class='container'>
+    <view style='width:100%;display:flex;flex-direction:column' class='tableView'>
+      <view style='width:100%;display:flex;flex-direction:row;height:120rpx;' wx:key wx:for="{{['机车名称:','机车地址:','最大速度:','I档:','II档:','III档:','IV档:']}}">
+        <text style='width:25%;margin-left:5%;height:100%;line-height:100rpx;'>{{item}}</text>
+        <input style='border:solid 4rpx black;width:60%;margin-left:2%;margin-top:15rpx;height:70rpx;' name="{{keyNames[index]}}" value='{{values[index]}}'></input>
+      </view>
+    </view>
+  </view>
+  <button style='color:white;position:fixed;bottom:0;width:100%;background-color:#1997eb;height:100rpx;line-height:100rpx;text-align:center' formType="submit">确定</button>
+</form>

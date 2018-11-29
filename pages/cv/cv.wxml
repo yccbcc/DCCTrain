@@ -1,0 +1,49 @@
+<!--pages/CV/cv.wxml-->
+<view class="container">
+  <include src="/pages/common/electric/electric.wxml" />
+  <view id='cvBoxBgView' style='margin-top:120rpx;'>
+    <view id='cvBox'>
+      <text>CV-Box</text>
+      <view id='cvContentView'>
+        <view id='cvContent-topView'>
+          <view id='cvContent-top-leftInput'>
+            <input placeholder='0' type='number' bindinput='bindinputCVLeft'></input>
+            <input placeholder='0' type='number' bindinput='bindinputCVRight' value='{{cvValueRightTxt}}'></input>
+          </view>
+          <view id='cvContent-top-rightBtn'>
+            <view bindtap='cvValueGetTap'>Get</view>
+            <view bindtap='cvValueSetTap'>Set</view>
+          </view>
+        </view>
+        <view id='cvContent-bottom'>
+          <checkbox-group class="group" bindchange="checkboxChange">
+            <view class="label-1" wx:for="{{checkboxItems}}" wx:key>
+              <label>
+                <checkbox value="{{item.value}}" checked="{{item.checked}}">{{item.value}}</checkbox>
+              </label>
+            </view>
+          </checkbox-group>
+        </view>
+      </view>
+
+    </view>
+  </view>
+
+<view class='electric_topBgView'>
+  <view>
+    <text class='topElectricTxt'>机车地址:</text>
+    <input class='topElectricShowTxt' type='number' bindinput='bindinputAddress' value='{{cvAddressNum}}'></input>
+  </view>
+  <view>
+    <text style='background-color:lightgray' bindtap='cvAddressGetTap'>Get</text>
+    <text style='background-color:lightgray' bindtap='cvAddressSetTap'>Set</text>
+  </view>
+</view>
+
+</view>
+
+
+<button bindtap='tap1'>test1</button>
+<button bindtap='tap2'>test2</button>
+<button bindtap='tap3'>test3</button>
+<button bindtap='tap4'>test4</button>

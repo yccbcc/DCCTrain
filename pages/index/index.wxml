@@ -1,0 +1,8 @@
+<!--index.wxml-->
+
+<view class="container">
+  <include src="/pages/common/electric/electric.wxml" />
+  <view id='tableView' style='margin-top:120rpx;'>
+    <text wx:for="{{['车辆控制','CV编程','机车库','蓝牙连接']}}" bindtap='cellTap' wx:key data-index="{{index}}">{{item}}</text>
+  </view>
+</view>

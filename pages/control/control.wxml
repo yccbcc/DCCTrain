@@ -1,0 +1,64 @@
+<!--pages/control/control.wxml-->
+<view class="container">
+  <include src="/pages/common/electric/electric.wxml" />
+
+  <view class='midView' style="height:{{middleViewHeight}}px">
+    <view class='mid-leftView'>
+      <view class='mid-left-topView' style='height:{{middleTopHeight}}px'>
+        <view style='font-size:26rpx;margin-top:15rpx;margin-left:20rpx;'>地址:</view>
+        <view style='font-size:26rpx;margin-left:20rpx;'>{{car.cab}}</view>
+      </view>
+      <scroll-view class='mid-left-bottomSv' scroll-y style="height:{{middleViewHeight - middleTopHeight}}px">
+        <view class='mid-left-bottomSv-cell' wx:key wx:for="{{cars}}" style="background-color:{{index==currentSel?'lightgray':'white'}}" data-index="{{index}}" bindtap='cellTap'>{{item.name}}</view>
+      </scroll-view>
+    </view>
+    <view class='mid-rightView'>
+      <view class='mid-right-topView' style='height:{{middleTopHeight}}px'>
+        <image style='width:80%;height:50px;margin:0 auto;' mode='scaleToFill' src='{{car.image}}' bindtap='imageTap'></image>
+      </view>
+      <view class='mid-right-bottomView' style='height:{{middleViewHeight - middleTopHeight}}px'>
+        <view class='mid-right-bottom-leftView'>
+          <view>{{car.direction == 1 ? car.speed + " ＞" : "＜ " + car.speed}}</view>
+          <view>
+            <view class='slipView'>
+              <canvas canvas-id="1" disable-scroll="{{true}}" bindtouchstart="bindtouchstart" bindtouchmove="bindtouchmove" bindtouchend="bindtouchend">
+                <view style='background-color:red;height:{{(car.speed / car.maxSpeed) * 180}}px'></view>
+              </canvas>
+            </view>
+            <view class='mid-righ-bottom-left-IIIV'>
+              <view wx:key style='background-color:{{car[item].isSelected ? "lightgray" : "white"}}' wx:for="{{dangWeiNames}}" bindtap='dangWeiClick' data-index="{{index}}">{{item}}</view>
+            </view>
+          </view>
+        </view>
+        <view class='mid-right-bottom-rightView' style='display:flex;flex-direction:row'>
+          <view wx:key style='background-color:{{car[item].isSelected ? "lightgray" : "white"}}' wx:for="{{['F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12','F13','F14','F15','F16','F17','F18','F19','F20','F21','F22','F23','F24','F25','F26','F27','F28','F29','F30','F31','F32']}}"
+            bindtap='functionBtnTap' data-index="{{index + 1}}">{{item}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class='bottomView'>
+    <view>
+      <view>
+        <view bindtap='soonStopTap'>
+          <text>{{"^"}}</text>
+        </view>
+        <view bindtap='functionBtnTap' data-index="{{0}}" style="background-color:{{car['F0'].isSelected ? 'lightgray' : 'white'}}">
+          <text>F0</text>
+        </view>
+      </view>
+      <view bindtap='stopTap'>
+        <text>停止</text>
+      </view>
+    </view>
+    <view bindtap='directionTap'>
+      <text>{{car.direction == 1 ? ">>" : "<<"}}</text>
+    </view>
+  </view>
+</view>
+
+<!-- <view style='width:100px;height:100px;background-color:lightgray;padding:10px; z-index:999;border:solid 20px green;box-sizing:border-box'>
+<view style='width:50%;height:100%;background-color:red'></view>
+</view>
+
+<view style='width:100px;height:100px;background-color:orange;'> </view> -->
