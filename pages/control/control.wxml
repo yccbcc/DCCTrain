@@ -41,7 +41,7 @@
     <view>
       <view>
         <view bindtap='soonStopTap'>
-          <text>{{"^"}}</text>
+          <text>{{"急停"}}</text>
         </view>
         <view bindtap='functionBtnTap' data-index="{{0}}" style="background-color:{{car['F0'].isSelected ? 'lightgray' : 'white'}}">
           <text>F0</text>
