@@ -9,10 +9,11 @@
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
-		"autoAudits": false
+		"autoAudits": false,
+		"uglifyFileName": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.9.2",
+	"libVersion": "2.4.1",
 	"appid": "wxcccc610ee26f0d18",
 	"projectname": "DCCTrain",
 	"debugOptions": {
