@@ -65,10 +65,12 @@
 
 .mid-right-bottom-leftView {
   width: 30%;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.mid-right-bottom-leftView>view:first-child {
+.mid-right-bottom-leftView>view:first-child>view:first-child {
   margin: 2%;
   width: 96%;
   height: 40px;
@@ -78,10 +80,19 @@
   line-height: 36px;
   border-radius: 4px;
 }
-.mid-right-bottom-leftView>view:last-child{
+.mid-right-bottom-leftView>view:first-child>view:last-child{
   display: flex;
   flex-direction: row;
   margin-top: 15px;
+}
+
+.mid-right-bottom-leftView>view:last-child{
+border: solid 4rpx slategray;
+border-radius: 8rpx;
+width: 100%;
+height: 120rpx;
+text-align: center;
+
 }
 
 .slipView{

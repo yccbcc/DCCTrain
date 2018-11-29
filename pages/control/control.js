@@ -120,7 +120,15 @@ Page({
 
 
   /************** 其他ui相关 ************/
+  functionResetTap:function(){
+    var car = this.data.car;
+    for (let i = 0; i <= 32; i++) {
+      car[`F${i}`].isSelected = false;
+    }
+    this.updateSelCar({})
 
+    
+  },
   //车辆点击事件  改变选中和车辆相关
   cellTap: function(e) {
     var index = e.currentTarget.dataset.index
