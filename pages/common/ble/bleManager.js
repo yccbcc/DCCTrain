@@ -293,7 +293,6 @@ const manager = {
     return backObj;
   },
   readMsg(ab) {
-    console.log("接收到了ab")
     if (!this.chNotify) {
       console.log("在manager中没有回调")
       return;
@@ -302,7 +301,7 @@ const manager = {
     var value = {}; //{type:type,electricValue:1000, speed:0,direction:0, randomNum1:0,randomNum2:0,cvValue:0,cvAddress:0,}
     var hex = ab2hex(ab)
     var str = hex2str(hex)
-    console.log("接收到命令",str)
+    console.log("接收到ab->str:",str)
     if (str.indexOf("<a") == 0) {
       type = this.type.electricCheck_read;
       if (str.length > 3) {
@@ -348,7 +347,6 @@ const manager = {
       } else {
         return;
       }
-      console.log("收到返回值:",value.cvValue,value.randomNum1,value.randomNum2,value.cvAddress)
     } else {
       console.log("收到-未知类型的消息", str)
       return;
