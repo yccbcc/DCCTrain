@@ -56,7 +56,7 @@
       </view>
     </view>
     <view bindtap='directionTap'>
-      <text>{{car.direction == 1 ? ">>" : "<<"}}</text>
+      <text>{{car.direction == 0 ? ">>" : "<<"}}</text>
     </view>
   </view>
 </view>

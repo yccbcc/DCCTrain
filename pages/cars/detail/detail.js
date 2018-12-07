@@ -1,4 +1,7 @@
 // pages/cars/detail/detail.js
+
+var tool = require("../../common/tool.js")
+
 var app = getApp();
 Page({
 
@@ -58,10 +61,31 @@ Page({
       })
       return;
     }
+    var cabValue = parseInt(e.detail.value.cab)
+    if (cabValue > 10239 || cabValue < 1) {
+      wx.showToast({
+        title: '地址需要在1~10239之间',
+        icon: 'none'
+      })
+      return;
+    }
+
+    var oneS = parseInt(e.detail.value['I'])
+    var twoS = parseInt(e.detail.value['II'])
+    var threeS = parseInt(e.detail.value['III'])
+    var fourS = parseInt(e.detail.value['IV'])
+    if((oneS > twoS || twoS > threeS) || threeS > fourS){
+      wx.showToast({
+        title: '请设置档位依次递增',
+        icon: 'none'
+      })
+      return;
+    }
 
     if (this.data.isAdd) {
       var timestamp = new Date().getTime() + '';
       value.id = timestamp;
+      value.isDefault = false;
       value.isSelected = false;
       value.speed = 0;
       value.register = 1;
@@ -136,6 +160,39 @@ Page({
         'cab': '99',
         'maxSpeed': 126
      */
+  },
+
+
+  bindinput: function(e) {
+    var index = e.currentTarget.dataset.index
+    var valueStr = e.detail.value;
+    if (tool.isNull(valueStr)) {
+      return;
+    }
+    var value = parseInt(valueStr);
+    if (isNaN(value)) {
+      return '';
+    }
+    if (index == 1) {
+
+      if (value > 10239) {
+        wx.showToast({
+          title: '地址需要在1~10239之间',
+          icon: 'none'
+        })
+        return parseInt(value / 10);
+      }
+    } else if (index == 2) {
+
+    } else if (index == 3 || index == 4 || index == 5 || index == 6) {
+      if (value > 100) {
+        wx.showToast({
+          title: '速度为百分比,请在0~100之间取值',
+          icon: 'none'
+        })
+        return parseInt(value / 10);
+      }
+    }
   },
 
   isNull: function(a) {

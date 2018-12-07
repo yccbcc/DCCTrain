@@ -9,38 +9,35 @@ Page({
    */
   data: {
     devices: [],
-    connected:false,
+    connected: false,
     name: '',
   },
 
-  initBle:function(){
+  initBle: function() {
     var _this = this;
     bleManager.setGetDevicesNotify(devices => {
       _this.setData({
         devices: devices
       })
     })
-    bleManager.setConnectedNotify(function (connected) {
+    bleManager.setConnectedNotify(function(connected) {
       console.log("蓝牙已经连接成功,正在发送<e>进行确认")
-      setTimeout(function(){
-        bleManager.writeMsg({
-          type: bleManager.type.bleConnectSuc_write,
-        })
-      },1500)
-      
+      bleManager.writeMsg({
+        type: bleManager.type.bleConnectSuc_write,
+      })
     })
     bleManager.setNameNotify((name) => {
       _this.setData({
         name: name
       })
     })
-    bleManager.setChsNotify(function (chs) {
+    bleManager.setChsNotify(function(chs) {
       _this.setData({
         chs: chs
       })
     })
     bleManager.setChNotify(value => {
-      if (value.type == bleManager.type.bleConnectSuc_read){
+      if (value.type == bleManager.type.bleConnectSuc_read) {
         app.globalData.connected = true;
         _this.setData({
           connected: true
@@ -49,7 +46,7 @@ Page({
       }
     })
   },
-  clearBle(){
+  clearBle() {
     bleManager.clearGetDevicesNotify();
     bleManager.clearConnectedNotify();
     bleManager.clearNameNotify();
@@ -92,8 +89,7 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
-  },
+  onHide: function() {},
 
   /**
    * 生命周期函数--监听页面卸载

@@ -3,7 +3,7 @@
 App({
 
   onLaunch: function() {
-    
+
     var model = wx.getSystemInfoSync().model
     this.globalData.isiPhone = model.substr(0, 6) == 'iPhone'
     this.globalData.windowWidth = wx.getSystemInfoSync().windowWidth
@@ -11,7 +11,7 @@ App({
 
     var cars = wx.getStorageSync('cars')
     if (cars) {
-      for(var i in cars){
+      for (var i in cars) {
         var everyCar = cars[i]
         everyCar.speed = 0;
         everyCar.direction = 0;
@@ -102,6 +102,7 @@ App({
     car: null, //当前车辆
     defCars: [{ //默认车库 两辆车
         id: '00000001', //id
+        isDefault: true, //默认车辆禁止修改
         isSelected: true,
         speed: 0, //当前速度
         register: 1, //一般为1, 当控制两辆车以上时1++,  暂时不需要考虑此属性ß
@@ -117,6 +118,7 @@ App({
 
       {
         id: '00000002',
+        isDefault: true,
         isSelected: false,
         speed: 0,
         register: 1,

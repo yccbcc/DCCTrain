@@ -5,7 +5,7 @@
     <view style='width:100%;display:flex;flex-direction:column' class='tableView'>
       <view style='width:100%;display:flex;flex-direction:row;height:120rpx;' wx:key wx:for="{{['机车名称:','机车地址:','最大速度:','I档:','II档:','III档:','IV档:']}}">
         <text style='width:25%;margin-left:5%;height:100%;line-height:100rpx;'>{{item}}</text>
-        <input style='border:solid 4rpx black;width:60%;margin-left:2%;margin-top:15rpx;height:70rpx;' name="{{keyNames[index]}}" value='{{values[index]}}'></input>
+        <input style='border:solid 4rpx black;width:60%;margin-left:2%;margin-top:15rpx;height:70rpx;' type="{{index!=0?'number':'text'}}" name="{{keyNames[index]}}" value='{{values[index]}}' bindinput='bindinput' data-index="{{index}}"></input>
       </view>
     </view>
   </view>

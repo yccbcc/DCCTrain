@@ -126,8 +126,26 @@ Page({
       car[`F${i}`].isSelected = false;
     }
     this.updateSelCar({})
-
-    
+    bleManager.writeMsg({
+      type: bleManager.type.functionTap_write,
+      functionIndex: 0
+    })
+    bleManager.writeMsg({
+      type: bleManager.type.functionTap_write,
+      functionIndex: 5
+    })
+    bleManager.writeMsg({
+      type: bleManager.type.functionTap_write,
+      functionIndex: 9
+    })
+    bleManager.writeMsg({
+      type: bleManager.type.functionTap_write,
+      functionIndex: 13
+    })
+    bleManager.writeMsg({
+      type: bleManager.type.functionTap_write,
+      functionIndex: 21
+    })
   },
   //车辆点击事件  改变选中和车辆相关
   cellTap: function(e) {

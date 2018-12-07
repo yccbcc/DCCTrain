@@ -122,8 +122,7 @@ const ble = {
       success: (res) => {
 
         _this.data.connected = true;
-        _this.connectedNotify && _this.connectedNotify(true)
-
+        
         _this.data.name = name;
         _this.nameNotify && _this.nameNotify(name)
 
@@ -206,6 +205,7 @@ const ble = {
               state: true,
             })
           }
+          _this.connectedNotify && _this.connectedNotify(true)
         }
       },
       fail(res) {

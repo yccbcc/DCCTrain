@@ -37,8 +37,8 @@ Page({
         return;
       }
       var car = this.data.cars[this.data.currentSel];
-      console.log(car)
       var newObj = JSON.parse(JSON.stringify(car));
+      newObj.isDefault = false;
       newObj.isSelected = false;
       this.data.cars.splice(this.data.currentSel + 1, 0, newObj);
       app.globalData.cars = this.data.cars;
@@ -57,6 +57,13 @@ Page({
         return;
       }
       var car = this.data.cars[this.data.currentSel];
+      if(car.isDefault){
+        wx.showToast({
+          title: '默认机车禁止修改',
+          icon: 'none'
+        })
+        return;
+      }
       wx.navigateTo({
         url: './detail/detail?id=' + car.id,
       })
@@ -64,6 +71,29 @@ Page({
       wx.navigateTo({
         url: './detail/detail?isAdd=1',
       })
+    }else{
+      if (this.data.currentSel == -1) {
+        wx.showToast({
+          title: '请选择一辆车',
+          icon: 'none'
+        })
+        return;
+      }
+      var car = this.data.cars[this.data.currentSel];
+      if (car.isDefault) {
+        wx.showToast({
+          title: '默认机车禁止删除',
+          icon: 'none'
+        })
+        return;
+      }
+      this.data.cars.splice(this.data.currentSel, 1);
+      app.globalData.cars = this.data.cars;
+      wx.setStorageSync('cars', this.data.cars)
+      this.setData({
+        cars: this.data.cars
+      })
+      this.data.currentSel = -1;
     }
   },
 

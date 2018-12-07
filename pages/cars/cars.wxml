@@ -1,7 +1,7 @@
 <!--pages/cars/cars.wxml-->
 <view class='container'>
   <view style='position:fixed;width:100%;height:110rpx;background-color:#fff;display:flex;flex-direction:row;border-bottom:solid 2rpx black'>
-    <view style='width:30%;margin-left:2.5%;text-align:center;margin-top:15rpx;margin-bottom:15rpx;line-height:80rpx;height:80rpx;border:solid 4rpx black;box-sizing: border-box;' wx:for="{{['复制','修改','新增']}}" wx:key bindtap='topViewClick' data-index="{{index}}">{{item}}</view>
+    <view style='width:30%;margin-left:2.5%;margin-right:2.5%;text-align:center;margin-top:15rpx;margin-bottom:15rpx;line-height:80rpx;height:80rpx;border:solid 4rpx black;box-sizing: border-box;' wx:for="{{['复制','修改','新增','删除']}}" wx:key bindtap='topViewClick' data-index="{{index}}">{{item}}</view>
   </view>
 
   <view style='margin-top:120rpx;' class='tableView'>

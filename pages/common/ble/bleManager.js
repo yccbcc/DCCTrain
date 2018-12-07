@@ -1,8 +1,9 @@
 const ble = require("./ble.js")
+const strManager = require("../string.js")
 const app = getApp()
 const manager = {
   chNotify: null,
-  maxNum:999,
+  maxNum: 999,
   type: {
     none: -1,
     electricCheck_write: 1, //检测电源 <c>
@@ -166,7 +167,7 @@ const manager = {
           // return;
         }
         if (e.type == this.type.speedChange_write) {
-          //<f CAB BYTE1 [BYTE2]>  这里的/速度/不做处理 需要控制器处理好,发过来. -1急停 0停止 ridection:方向 0右1左
+          //  这里的/速度/不做处理 需要控制器处理好,发过来. -1急停 0停止 ridection:方向 0右1左
           msg = `<t ${car.register} ${car.cab} ${e.speed} ${car.direction}>`
         } else if (e.type == this.type.functionTap_write) {
           var index = e.functionIndex;
@@ -233,8 +234,7 @@ const manager = {
           msg = `<R 18 ${randomNum1} ${randomNum2}>`
           backObj.randomNum1 = randomNum1;
           backObj.randomNum2 = randomNum2;
-        }
-        else if (e.type == this.type.carAddress_set_low128_R29_write) {
+        } else if (e.type == this.type.carAddress_set_low128_R29_write) {
           var randomNum1 = randomNum(1, this.maxNum)
           var randomNum2 = randomNum(1, this.maxNum)
           msg = `<R 29 ${randomNum1} ${randomNum2}>`
@@ -246,9 +246,7 @@ const manager = {
           msg = `<W 29 ${e.cvValue} ${randomNum1} ${randomNum2}>`
           backObj.randomNum1 = randomNum1;
           backObj.randomNum2 = randomNum2;
-        }
-        
-        else if (e.type == this.type.carAddress_set_low128_first_write) {
+        } else if (e.type == this.type.carAddress_set_low128_first_write) {
           var randomNum1 = randomNum(1, this.maxNum)
           var randomNum2 = randomNum(1, this.maxNum)
           msg = `<W 1 ${e.cvValue} ${randomNum1} ${randomNum2}>`
@@ -292,21 +290,38 @@ const manager = {
     backObj.type = e.type;
     return backObj;
   },
+
+  tempStr: "",
+
   readMsg(ab) {
     if (!this.chNotify) {
       console.log("在manager中没有回调")
       return;
     }
-    var type = this.type.none;
-    var value = {}; //{type:type,electricValue:1000, speed:0,direction:0, randomNum1:0,randomNum2:0,cvValue:0,cvAddress:0,}
     var hex = ab2hex(ab)
     var str = hex2str(hex)
-    console.log("接收到ab->str:",str)
+    console.log("接收到ab->str:", str)
+
+    var allStr = this.tempStr + str;
+    var allOrders = []
+    //属性扩展
+    this.tempStr = strManager.cutstr(allStr, "<", ">", allOrders)
+    for (var i = 0; i < allOrders.length; i++) {
+      var order = allOrders[i]
+      this.handleReadStr(order)
+    }
+  },
+  handleReadStr: function(str) {
+    if (str.indexOf("<") != 0 || !str.endsWith(">")) {
+      return;
+    }
+    var value = {} //{type:type,electricValue:1000, speed:0,direction:0, randomNum1:0,randomNum2:0,cvValue:0,cvAddress:0,}
+    var type = this.type.none;
     if (str.indexOf("<a") == 0) {
       type = this.type.electricCheck_read;
       if (str.length > 3) {
         value.electricValue = str.substr(2, str.length - 3)
-      }else{
+      } else {
         value.electricValue = '0'
       }
     } else if (str == "<p0>" || str == '<p2>' || str == '<p3>') {
@@ -335,7 +350,7 @@ const manager = {
         var secStr = arr[0];
         var arr2 = secStr.split('|');
         if (arr2.length == 3) {
-          var randomNum1 = arr2[0].substr(2,arr2[0].length - 2);
+          var randomNum1 = arr2[0].substr(2, arr2[0].length - 2);
           var randomNum2 = arr2[1];
           var cvAddress = arr2[2];
           value.randomNum1 = randomNum1;
@@ -356,6 +371,7 @@ const manager = {
     this.chNotify(value)
   }
 }
+
 
 module.exports = manager;
 
