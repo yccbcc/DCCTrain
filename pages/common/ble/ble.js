@@ -205,7 +205,7 @@ const ble = {
               state: true,
             })
           }
-          _this.connectedNotify && _this.connectedNotify(true)
+          this.connectedNotify && this.connectedNotify(true)
         }
       },
       fail(res) {
