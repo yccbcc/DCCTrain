@@ -1,5 +1,5 @@
 const ble = require("./ble.js")
-const strManager = require("../string.js")
+const strManager = require("../stringExt.js")
 const app = getApp()
 const manager = {
   chNotify: null,
