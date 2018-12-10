@@ -4,6 +4,10 @@ App({
 
   onLaunch: function() {
 
+    var a = 31;
+    var b = 2
+    console.log(a/b)
+
     var model = wx.getSystemInfoSync().model
     this.globalData.isiPhone = model.substr(0, 6) == 'iPhone'
     this.globalData.windowWidth = wx.getSystemInfoSync().windowWidth
@@ -106,7 +110,7 @@ App({
         isSelected: true,
         speed: 0, //当前速度
         register: 1, //一般为1, 当控制两辆车以上时1++,  暂时不需要考虑此属性ß
-        direction: 0, //方向 0:向右, 1:向左
+        direction: 0, //方向 0:左边, 1:右边
         'type': '数码', //数码机车:模拟机车
         'name': '数码',
         'image': '/images/control/car_bg.png',

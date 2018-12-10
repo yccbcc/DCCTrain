@@ -43,6 +43,9 @@ Page({
           connected: true
         })
         console.log("确认通信成功,可以开始通信了")
+        wx.navigateBack({
+          
+        })
       }
     })
   },

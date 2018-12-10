@@ -101,7 +101,8 @@ Page({
       //电
       if (value.type == bleManager.type.electricCheck_read) {
         console.log("收到-电源值回调")
-        var electricTxt = (parseInt(value.electricValue)) + '/1000';
+        var theNum = (parseInt(value.electricValue) / 500)
+        var electricTxt = theNum.toFixed(2) + 'A';
         this.setData({
           electricTxt: electricTxt
         })

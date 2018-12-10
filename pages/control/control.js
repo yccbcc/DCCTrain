@@ -85,7 +85,8 @@ Page({
       //电
       if (value.type == bleManager.type.electricCheck_read) {
         console.log("收到-电源值回调", value.electricValue)
-        var electricTxt = (parseInt(value.electricValue)) + '/1000';
+        var theNum = (parseInt(value.electricValue) / 500)
+        var electricTxt = theNum.toFixed(2) + 'A';
         this.setData({
           electricTxt: electricTxt
         })
@@ -212,10 +213,11 @@ Page({
   },
   soonStopTap: function() {
     this.handleSlidY(-1, true)
+    this.handleSlidY(180, false)
   },
 
   directionTap: function() {
-    this.data.car.direction = this.data.car.direction == 1 ? 0 : 1;
+    this.data.car.direction = this.data.car.direction == 0 ? 1 : 0;
     this.updateSelCar({})
     this.writeSpeed(this.data.car.speed)
   },
@@ -320,78 +322,3 @@ Page({
   },
 })
 
-
-/************************** ab <--> 16进制字符串  ***************** */
-function ab2hex(buffer) {
-  let bufferType = Object.prototype.toString.call(buffer)
-  if (buffer != '[object ArrayBuffer]') {
-    return
-  }
-  let dataView = new DataView(buffer)
-
-  var hexStr = '';
-  for (var i = 0; i < dataView.byteLength; i++) {
-    var str = dataView.getUint8(i);
-    var hex = (str & 0xff).toString(16);
-    hex = (hex.length === 1) ? '0' + hex : hex;
-    hexStr += hex;
-  }
-  return hexStr.toUpperCase();
-}
-
-function hex2ab(str) {
-  if (str == null) {
-    return new ArrayBuffer(0);
-  }
-  if (typeof(str) == "number") {
-    let buffer = new ArrayBuffer(1)
-    let dataView = new DataView(buffer)
-    dataView.setUint8(0, str)
-    return buffer;
-  }
-  if (typeof(str) == "string") {
-    var buffer = new ArrayBuffer(Math.ceil(str.length / 2));
-    let dataView = new DataView(buffer)
-
-    let ind = 0;
-    for (var i = 0; i < str.length; i += 2) {
-      let code = parseInt(str.substr(i, 2), 16)
-      dataView.setUint8(ind, code)
-      ind++
-    }
-    return buffer;
-  }
-}
-
-/********** 字符串(英文) <---> 16进制 ************ */
-function str2hex(str) {
-  if (str === "")
-    return "";
-  var hexCharCode = [];
-  // 　　hexCharCode.push("0x");
-  for (var i = 0; i < str.length; i++) {
-    hexCharCode.push((str.charCodeAt(i)).toString(16));
-  }
-  return hexCharCode.join("");
-}
-
-// 16进制转字符串
-function hex2str(hexCharCodeStr) {
-  var trimedStr = hexCharCodeStr.trim();
-  var rawStr =
-    trimedStr.substr(0, 2).toLowerCase() === "0x" ?
-    trimedStr.substr(2) :
-    trimedStr;
-  var len = rawStr.length;
-  if (len % 2 !== 0) {
-    alert("Illegal Format ASCII Code!");
-    return "";
-  }
-  var curCharCode;
-  var resultStr = [];
-  for (var i = 0; i < len; i = i + 2) {
-    curCharCode = parseInt(rawStr.substr(i, 2), 16); // ASCII Code Value
-    resultStr.push(String.fromCharCode(curCharCode));
-  }
-  return resultStr.join("");
-}

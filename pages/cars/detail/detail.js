@@ -165,34 +165,37 @@ Page({
 
   bindinput: function(e) {
     var index = e.currentTarget.dataset.index
-    var valueStr = e.detail.value;
-    if (tool.isNull(valueStr)) {
-      return;
-    }
-    var value = parseInt(valueStr);
-    if (isNaN(value)) {
-      return '';
-    }
-    if (index == 1) {
-
-      if (value > 10239) {
-        wx.showToast({
-          title: '地址需要在1~10239之间',
-          icon: 'none'
-        })
-        return parseInt(value / 10);
+    if(index != 0){
+      var valueStr = e.detail.value;
+      if (tool.isNull(valueStr)) {
+        return;
       }
-    } else if (index == 2) {
+      var value = parseInt(valueStr);
+      if (isNaN(value)) {
+        return '';
+      }
+      if (index == 1) {
 
-    } else if (index == 3 || index == 4 || index == 5 || index == 6) {
-      if (value > 100) {
-        wx.showToast({
-          title: '速度为百分比,请在0~100之间取值',
-          icon: 'none'
-        })
-        return parseInt(value / 10);
+        if (value > 10239) {
+          wx.showToast({
+            title: '地址需要在1~10239之间',
+            icon: 'none'
+          })
+          return parseInt(value / 10);
+        }
+      } else if (index == 2) {
+
+      } else if (index == 3 || index == 4 || index == 5 || index == 6) {
+        if (value > 100) {
+          wx.showToast({
+            title: '速度为百分比,请在0~100之间取值',
+            icon: 'none'
+          })
+          return parseInt(value / 10);
+        }
       }
     }
+    
   },
 
   isNull: function(a) {
