@@ -213,7 +213,6 @@ Page({
   },
   soonStopTap: function() {
     this.handleSlidY(-1, true)
-    this.handleSlidY(180, false)
   },
 
   directionTap: function() {
