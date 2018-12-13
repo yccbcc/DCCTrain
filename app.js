@@ -4,10 +4,6 @@ App({
 
   onLaunch: function() {
 
-    var a = 31;
-    var b = 2
-    console.log(a/b)
-
     var model = wx.getSystemInfoSync().model
     this.globalData.isiPhone = model.substr(0, 6) == 'iPhone'
     this.globalData.windowWidth = wx.getSystemInfoSync().windowWidth

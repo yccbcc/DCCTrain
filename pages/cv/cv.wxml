@@ -41,9 +41,3 @@
 </view>
 
 </view>
-
-
-<button bindtap='tap1'>test1</button>
-<button bindtap='tap2'>test2</button>
-<button bindtap='tap3'>test3</button>
-<button bindtap='tap4'>test4</button>
