@@ -5,61 +5,66 @@
   <view class='midView' style="height:{{middleViewHeight}}px">
     <view class='mid-leftView'>
       <view class='mid-left-topView' style='height:{{middleTopHeight}}px'>
-        <view style='font-size:26rpx;margin-top:15rpx;margin-left:20rpx;'>地址:</view>
-        <view style='font-size:26rpx;margin-left:20rpx;'>{{car.cab}}</view>
+        <view style='font-size:26rpx;margin-top:15rpx;margin-left:20rpx;'>名称:{{car.name}}</view>
+        <view style='font-size:26rpx;margin-left:20rpx;'>地址:{{car.cab}}</view>
       </view>
-      <scroll-view class='mid-left-bottomSv' scroll-y style="height:{{middleViewHeight - middleTopHeight}}px">
-        <view class='mid-left-bottomSv-cell' wx:key wx:for="{{cars}}" style="background-color:{{index==currentSel?'lightgray':'white'}}" data-index="{{index}}" bindtap='cellTap'>{{item.name}}</view>
-      </scroll-view>
+
+      <view id='selectedCarBtn' style='height:{{selectedCarHeight}}px' bindtap='showCarsListTap'>选择机车</view>
+
+      <view class='slipView' style='height:{{canvasHeight}}px'>
+        <canvas style='height:{{canvasHeight}}px' canvas-id="speedCanvas" disable-scroll="{{true}}" bindtouchstart="bindtouchstart" bindtouchmove="bindtouchmove" bindtouchend="bindtouchend">
+          <view style='background-color:lightgray;height:{{( (car.maxSpeed - car.speed) / car.maxSpeed) * canvasHeight}}px'></view>
+        </canvas>
+        <scroll-view wx:if="{{isShowCarList}}" class='mid-left-bottomSv' scroll-y style="height:{{middleViewHeight - middleTopHeight}}px;">
+          <view class='mid-left-bottomSv-cell' wx:key wx:for="{{cars}}" style="background-color:{{index==currentSel?'lightgray':'white'}}" data-index="{{index}}" bindtap='cellTap'>{{item.name}}</view>
+        </scroll-view>
+      </view>
+
     </view>
     <view class='mid-rightView'>
       <view class='mid-right-topView' style='height:{{middleTopHeight}}px'>
-        <image style='width:80%;height:50px;margin:0 auto;' mode='scaleToFill' src='{{car.image}}' bindtap='imageTap'></image>
+        <image style='width:100%;height:100%;margin:0 auto;' mode='scaleToFill' src='{{car.image}}' bindtap='imageTap'></image>
       </view>
       <view class='mid-right-bottomView' style='height:{{middleViewHeight - middleTopHeight}}px'>
         <view class='mid-right-bottom-leftView'>
           <view>
-            <view>{{car.direction == 1 ? car.speed + " ＞" : "＜ " + car.speed}}</view>
+            <view>{{car.direction == 1 ? car.speed + "＞" : "＜" + car.speed}}</view>
             <view>
-              <view class='slipView'>
-                <canvas canvas-id="1" disable-scroll="{{true}}" bindtouchstart="bindtouchstart" bindtouchmove="bindtouchmove" bindtouchend="bindtouchend">
-                  <view style='background-color:red;height:{{(car.speed / car.maxSpeed) * 180}}px'></view>
-                </canvas>
-              </view>
               <view class='mid-righ-bottom-left-IIIV'>
                 <view wx:key style='background-color:{{car[item].isSelected ? "lightgray" : "white"}}' wx:for="{{dangWeiNames}}" bindtap='dangWeiClick' data-index="{{index}}">{{item}}</view>
               </view>
             </view>
           </view>
-          <view bindtap='functionResetTap'>功能键复位</view>
-
+          <view bindtap='soonStopTap'>
+            <text>{{"急停"}}</text>
+          </view>
         </view>
-        <view class='mid-right-bottom-rightView' style='display:flex;flex-direction:row'>
-          <view wx:key style='background-color:{{car[item].isSelected ? "lightgray" : "white"}}' wx:for="{{['F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12','F13','F14','F15','F16','F17','F18','F19','F20','F21','F22','F23','F24','F25','F26','F27','F28','F29','F30','F31','F32']}}"
-            bindtap='functionBtnTap' data-index="{{index + 1}}">{{item}}</view>
+        <view class='mid-right-bottom-rightView'>
+          <view style='height:{{functionBtnHeight}}px'>
+            <view bindtap='functionResetTap' style='height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px'>复位</view>
+            <view bindtap='functionBtnTap' data-sectionindex="{{0}}" data-cellindex="{{0}}" style="background-color:{{car['F0'].isSelected ? 'lightgray' : 'white'}};height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px">F0</view>
+          </view>
+          <scroll-view class='functionsBgScrollView' scroll-y style="height:{{middleViewHeight - middleTopHeight - functionBtnHeight - functionSpaceHeight}}px">
+            <view class='functionsBtns' wx:key style='height:{{functionBtnHeight}}px;margin-top:{{10}}px' wx:for="{{[['F1','F2'],['F3','F4'],['F5','F6'],['F7','F8'],['F9','F10'],['F11','F12'],['F13','F14'],['F15','F16'],['F17','F18'],['F19','F20'],['F21','F22'],['F23','F24'],['F25','F26'],['F27','F28']]}}"
+              wx:for-item="sectionitem" wx:for-index='sectionindex'>
+              <view style='background-color:{{car[item].isSelected ? "lightgray" : "white"}};height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px' wx:key wx:for="{{sectionitem}}" data-sectionindex="{{sectionindex}}" data-cellindex="{{index + 1}}" bindtap='functionBtnTap'>{{item}}</view>
+            </view>
+          </scroll-view>
         </view>
       </view>
     </view>
   </view>
-  <view class='bottomView'>
-    <view>
-      <view>
-        <view bindtap='soonStopTap'>
-          <text>{{"急停"}}</text>
-        </view>
-        <view bindtap='functionBtnTap' data-index="{{0}}" style="background-color:{{car['F0'].isSelected ? 'lightgray' : 'white'}}">
-          <text>F0</text>
-        </view>
-      </view>
-      <view bindtap='stopTap'>
-        <text>停止</text>
-      </view>
+  <view class='bottomView' style="height:{{bottomViewHeight}}px;">
+    <view bindtap='stopTap'>
+      <text>停止</text>
     </view>
     <view bindtap='directionTap'>
       <text>{{car.direction == 0 ? "<<" : ">>"}}</text>
     </view>
   </view>
 </view>
+
+<!-- <view style='position:fixed;top:100px;width:200px;height:180px;left:{{leftMove-200}}px;background-color:red' bindtouchstart="bindtouchstartSpeed" bindtouchmove="bindtouchmoveSpeed" bindtouchend="bindtouchendSpeed"></view> -->
 
 <!-- <view style='width:100px;height:100px;background-color:lightgray;padding:10px; z-index:999;border:solid 20px green;box-sizing:border-box'>
 <view style='width:50%;height:100%;background-color:red'></view>

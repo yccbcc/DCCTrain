@@ -15,6 +15,8 @@ Page({
     connected:false,
     electriced:false,
     electricInterval: null,
+    
+
   },
 
   onLoad: function() {
@@ -99,6 +101,7 @@ Page({
 
 /************** 其他ui相关 ************/
 
+
   //ui cell点击事件.
   cellTap: function(e) {
     let index = e.currentTarget.dataset.index;
@@ -121,10 +124,24 @@ Page({
     }
   },
 
+  endTap:function(e){
+    var type = bleManager.type.electricStop_write
+    bleManager.writeMsg({
+      type: type
+    })
+    bleManager.closeBluetoothAdapter()
 
+    app.globalData.connected = false;
+    app.globalData.electriced = false;
+    app.globalData.electricTxt = "0A"
 
-
-
+    this.setData({
+      electricTxt: '0',
+      connected: false,
+      electriced: false,
+      electricInterval: null,
+    })
+  },
 
 
 

@@ -5,4 +5,10 @@
   <view id='tableView' style='margin-top:120rpx;'>
     <text wx:for="{{['车辆控制','CV编程','机车库','蓝牙连接']}}" bindtap='cellTap' wx:key data-index="{{index}}">{{item}}</text>
   </view>
+
+  
 </view>
+
+<view style="color:black;position:fixed;bottom:0;left:0;width:100%;height:50px;background-color:#FA2600;line-height:50px;text-align:center" bindtap='endTap'>结束进程</view>
+
+

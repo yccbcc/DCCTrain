@@ -17,9 +17,20 @@ Page({
     electricInterval: null,
 
     //内容高度
-    middleViewHeight: 0,
-    middleTopHeight: 50,
     dangWeiNames: ['IV', 'III', 'II', 'I'],
+
+    middleTopHeight: 50, //图片高度
+    functionBtnHeight: 0, //功能键高度.计算得出
+    functionSpaceHeight: 10, //功能键空隙
+
+    selectedCarHeight: 40, //选择机车按钮高度
+    canvasHeight: 0, //计算得到
+
+    topViewHeight: 60, //电流高度
+    middleViewHeight: 0, //中间视图高度. 计算得出
+    bottomViewHeight: 60, //底部视图高度.
+
+    isShowCarList: false,
 
     //车辆选择
     cars: null,
@@ -39,8 +50,14 @@ Page({
         currentSel = i;
       }
     }
+
+    var middleViewHeight = app.globalData.windowHeight - (this.data.topViewHeight + this.data.bottomViewHeight)
+    var functionHeight = (app.globalData.windowHeight - (this.data.topViewHeight + this.data.bottomViewHeight + this.data.middleTopHeight)) / 6 - this.data.functionSpaceHeight;
+    var canvasHeight = middleViewHeight - this.data.middleTopHeight - this.data.selectedCarHeight - 20 - 20;
     this.setData({
-      middleViewHeight: app.globalData.windowHeight - (60 + 90),
+      canvasHeight: canvasHeight,
+      middleViewHeight: middleViewHeight,
+      functionBtnHeight: functionHeight,
       cars: cars,
       car: car,
       currentSel: currentSel
@@ -48,6 +65,20 @@ Page({
   },
   onShow: function() {
     this.initBle();
+
+    const ctx = wx.createCanvasContext('speedCanvas')
+
+    // Create linear gradient
+    var width = app.globalData.windowWidth * 0.3 * 0.9
+    const grd = ctx.createLinearGradient(0, 0, 0, this.data.canvasHeight)
+    grd.addColorStop(0, 'red')
+    grd.addColorStop(0.5, 'yellow')
+    grd.addColorStop(1, 'green')
+
+    // Fill with gradient
+    ctx.setFillStyle(grd)
+    ctx.fillRect(0, 0, width, this.data.canvasHeight)
+    ctx.draw()
   },
   onHide: function() {
     this.clearBle();
@@ -121,7 +152,14 @@ Page({
 
 
   /************** 其他ui相关 ************/
-  functionResetTap:function(){
+//机车列表的展示与隐藏
+  showCarsListTap: function() {
+    this.setData({
+      isShowCarList: !this.data.isShowCarList
+    })
+  },
+//功能键复位
+  functionResetTap: function() {
     var car = this.data.car;
     for (let i = 0; i <= 32; i++) {
       car[`F${i}`].isSelected = false;
@@ -176,7 +214,10 @@ Page({
   //功能键点击事件
   functionBtnTap: function(e) {
 
-    var index = e.currentTarget.dataset.index
+    var section = e.currentTarget.dataset.sectionindex
+    var cell = e.currentTarget.dataset.cellindex
+    var index = section * 2 + cell
+    console.log(index)
     if (index > 28) {
       return;
     }
@@ -188,7 +229,6 @@ Page({
     })
   },
 
-
   // 滑块事件
   bindtouchstart: function(e) {
     var y = e.changedTouches[0].y;
@@ -198,8 +238,8 @@ Page({
     var y = e.changedTouches[0].y;
     if (y < 0) {
       y = 0
-    } else if (y > 180) {
-      y = 180
+    } else if (y > this.data.canvasHeight) {
+      y = this.data.canvasHeight
     }
     this.handleSlidY(y, false)
   },
@@ -209,7 +249,7 @@ Page({
   },
   //下方功能键
   stopTap: function() {
-    this.handleSlidY(180, false)
+    this.handleSlidY(this.data.canvasHeight, false)
   },
   soonStopTap: function() {
     this.handleSlidY(-1, true)
@@ -229,7 +269,7 @@ Page({
 
     if (!isSoonStop) {
       var maxSpeed = parseInt(this.data.car.maxSpeed)
-      var a = (180 - y) / 180
+      var a = (this.data.canvasHeight - y) / this.data.canvasHeight
       var speed = parseInt(maxSpeed * a)
       this.data.car.speed = speed;
       this.updateSelCar({})
@@ -294,6 +334,33 @@ Page({
   },
 
 
+
+  // 滑块事件
+  bindtouchstartSpeed: function(e) {
+    var x = e.changedTouches[0].clientX
+    this.data.leftMoveStartX = x;
+  },
+  bindtouchmoveSpeed: function(e) {
+    var x = e.changedTouches[0].clientX
+    console.log(e.changedTouches[0])
+    this.setData({
+      leftMove: 50 + x - this.data.leftMoveStartX
+    })
+  },
+
+  bindtouchendSpeed: function(e) {
+    var leftMove = 0
+    if (this.data.leftMove > 100) {
+      leftMove = 200
+    } else {
+      leftMove = 50
+    }
+    this.setData({
+      leftMove: leftMove
+    })
+  },
+
+
   /**************image相关********* */
 
   imageTap() {
@@ -320,4 +387,3 @@ Page({
     })
   },
 })
-

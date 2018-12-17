@@ -38,6 +38,10 @@ Page({
       this.setData({
         values: [car.name, car.cab, car.maxSpeed, car['I'].value, car['II'].value, car['III'].value, car['IV'].value]
       })
+    }else{
+      this.setData({
+        values: ["", "", "126", "15", "30","50","80"]
+      })
     }
   },
 

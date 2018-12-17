@@ -118,12 +118,14 @@ const manager = {
   openBluetoothAdapter: function() {
     ble.openBluetoothAdapter();
   },
+  closeBluetoothAdapter: function () {
+    ble.closeBluetoothAdapter();
+  },
+  
   createBLEConnection: function(e) {
     ble.createBLEConnection(e)
   },
-  closeBluetoothAdapter: function() {
-    ble.closeBluetoothAdapter();
-  },
+  
 
 
 

@@ -96,7 +96,7 @@ App({
     //在ble界面保存的,  以后会移动到blemanager中保存
     connected: false,
     electriced: false,
-    electricTxt: '0',
+    electricTxt: '0A',
 
     cars: null, //当前拥有的所有车辆
     car: null, //当前车辆
