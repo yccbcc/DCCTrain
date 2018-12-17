@@ -12,7 +12,6 @@
   flex-direction: row;
   top: 60px;
   box-sizing: border-box;
-
 }
 
 /* 中间视图 左侧 */
@@ -29,7 +28,7 @@
   flex-shrink: 0;
 }
 
-#selectedCarBtn{
+#selectedCarBtn {
   margin-top: 10px;
   margin-bottom: 10px;
   flex-shrink: 0;
@@ -47,7 +46,6 @@
   position: relative;
 }
 
-
 canvas {
   margin-left: 5%;
   margin-right: 5%;
@@ -63,7 +61,6 @@ canvas view {
   left: 0;
   right: 0;
 }
-
 
 .mid-left-bottomSv {
   position: absolute;
@@ -81,9 +78,8 @@ canvas view {
   border-bottom: solid 2rpx lightgray;
 }
 
-
-
 /* 中间视图 右侧 */
+
 .mid-rightView {
   display: flex;
   flex-direction: column;
@@ -171,7 +167,7 @@ canvas view {
   flex-direction: row;
 }
 
-.mid-right-bottom-rightView>view:first-child>view{
+.mid-right-bottom-rightView>view:first-child>view {
   width: 45%;
   margin-left: 5%;
   border: solid 2px lightgray;
@@ -181,18 +177,19 @@ canvas view {
   text-align: center;
 }
 
-.functionsBgScrollView{
+.functionsBgScrollView {
   display: flex;
   flex-direction: row;
 }
 
-.functionsBtns{
+.functionsBtns {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-
 }
-.functionsBtns>view{
+
+.functionsBtns>view {
+  position: relative;
   width: 45%;
   margin-left: 5%;
   height: 50px;
@@ -203,20 +200,45 @@ canvas view {
   text-align: center;
 }
 
+.functionsBtns>view>input {
+  background: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.functionsBtns>view>view {
+  background: white;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 30%;
+  height: 30%;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 30%;
+}
+
 /* bottomView */
 
 .bottomView {
   position: fixed;
   width: 80%;
   padding: 5px 10% 5px 10%;
-  margin-left:10%;
+  margin-left: 10%;
   display: flex;
   flex-direction: row;
   bottom: 0;
   justify-content: space-around;
   box-sizing: border-box;
 }
-.bottomView>view{
+
+.bottomView>view {
   width: 45%;
   border: solid 2px black;
   display: flex;
@@ -225,6 +247,3 @@ canvas view {
   align-items: center;
   border-radius: 4px;
 }
-
-
-

@@ -11,17 +11,24 @@ App({
 
     var cars = wx.getStorageSync('cars')
     if (cars) {
+      
       for (var i in cars) {
         var everyCar = cars[i]
         everyCar.speed = 0;
         everyCar.direction = 0;
         for (let i = 0; i <= 32; i++) {
-          everyCar[`F${i}`] = {
-            name: `F${i}`,
-            isSelected: false
-          }
+          everyCar[`F${i}`].isSelected = false
         }
+        var dangName = ["IV", "III", "II", "I"]
+        var dangValue = [25, 50, 75, 100]
+        for (let j = 0; j < 4; j++) {
+          var name = dangName[j]
+          var value = dangValue[3 - j]
+          everyCar[name].isSelected = false
+        }
+        
       }
+      
       this.globalData.cars = cars;
       for (let i in cars) {
         var car = cars[0]
@@ -35,7 +42,8 @@ App({
         for (let i = 0; i <= 32; i++) {
           defCar[`F${i}`] = {
             name: `F${i}`,
-            isSelected: false
+            isSelected: false,
+            minName: 'F' + i
           }
         }
         var dangName = ["IV", "III", "II", "I"]

@@ -32,6 +32,11 @@ Page({
 
     isShowCarList: false,
 
+    isLongPress: false,
+
+    functionNames: [],
+    functionEditsStatus: [],
+
     //车辆选择
     cars: null,
     car: null,
@@ -50,11 +55,20 @@ Page({
         currentSel = i;
       }
     }
+    this.data.car = car;
+    var functionNames = this.initFunctionNames();
+    var functionEditsStatus = [];
+    for (var i = 1; i <= 28; i++) {
+      functionEditsStatus.push(false)
+    }
+    
 
     var middleViewHeight = app.globalData.windowHeight - (this.data.topViewHeight + this.data.bottomViewHeight)
     var functionHeight = (app.globalData.windowHeight - (this.data.topViewHeight + this.data.bottomViewHeight + this.data.middleTopHeight)) / 6 - this.data.functionSpaceHeight;
     var canvasHeight = middleViewHeight - this.data.middleTopHeight - this.data.selectedCarHeight - 20 - 20;
     this.setData({
+      functionNames: functionNames,
+      functionEditsStatus: functionEditsStatus,
       canvasHeight: canvasHeight,
       middleViewHeight: middleViewHeight,
       functionBtnHeight: functionHeight,
@@ -62,6 +76,36 @@ Page({
       car: car,
       currentSel: currentSel
     })
+  },
+  initFunctionNames:function(){
+    var functionNames = [];
+    var functionKeys = [
+      ['F1', 'F2'],
+      ['F3', 'F4'],
+      ['F5', 'F6'],
+      ['F7', 'F8'],
+      ['F9', 'F10'],
+      ['F11', 'F12'],
+      ['F13', 'F14'],
+      ['F15', 'F16'],
+      ['F17', 'F18'],
+      ['F19', 'F20'],
+      ['F21', 'F22'],
+      ['F23', 'F24'],
+      ['F25', 'F26'],
+      ['F27', 'F28']
+    ];
+    for (var i = 0; i < functionKeys.length; i++) {
+      var d = [];
+      var a = functionKeys[i];
+      for (var j = 0; j < 2; j++) {
+        var b = a[j]
+        var c = this.data.car[b]
+        d.push(c)
+      }
+      functionNames.push(d)
+    }
+    return functionNames;
   },
   onShow: function() {
     this.initBle();
@@ -152,13 +196,14 @@ Page({
 
 
   /************** 其他ui相关 ************/
-//机车列表的展示与隐藏
+
+  //机车列表的展示与隐藏
   showCarsListTap: function() {
     this.setData({
       isShowCarList: !this.data.isShowCarList
     })
   },
-//功能键复位
+  //功能键复位
   functionResetTap: function() {
     var car = this.data.car;
     for (let i = 0; i <= 32; i++) {
@@ -198,10 +243,13 @@ Page({
       car.isSelected = false;
     }
     selCar.isSelected = true;
+    this.data.car = selCar;
+    var functionNames = this.initFunctionNames()
     this.setData({
       currentSel: index,
       car: selCar,
       cars: this.data.cars,
+      functionNames: functionNames
     })
     app.globalData.cars = this.data.cars;
     app.globalData.car = selCar;
@@ -211,12 +259,62 @@ Page({
     })
   },
 
+
+  //功能键长恩事件
+  functionBtnLongTap: function(e) {
+    this.data.isLongPress = true;
+    var section = e.currentTarget.dataset.sectionindex
+    var cell = e.currentTarget.dataset.cellindex
+    var index = section * 2 + cell
+    this.data.functionEditsStatus[index] = true;
+    
+    this.setData({
+      functionEditsStatus: this.data.functionEditsStatus,
+    })
+
+    console.log(this.data.functionEditsStatus)
+  },
+  bindconfirm: function(e) {
+    console.log(e)
+    var section = e.currentTarget.dataset.sectionindex
+    var cell = e.currentTarget.dataset.cellindex
+    var index = section * 2 + cell
+    if(e.detail.value && e.detail.value.length > 0){
+      this.data.car[`F${index}`].name = e.detail.value;
+      var functionNames = this.initFunctionNames();
+      this.setData({
+        functionNames: functionNames
+      })
+      this.updateSelCar({})
+    }
+  },
+  bindblur: function(e) {
+    var section = e.currentTarget.dataset.sectionindex
+    var cell = e.currentTarget.dataset.cellindex
+    var index = section * 2 + cell
+    this.data.functionEditsStatus[index] = false;
+
+    this.setData({
+      functionEditsStatus: this.data.functionEditsStatus,
+    })
+  },
+
   //功能键点击事件
   functionBtnTap: function(e) {
+    if (this.data.isLongPress){
+      this.data.isLongPress = false;
+      return;
+    }
 
     var section = e.currentTarget.dataset.sectionindex
     var cell = e.currentTarget.dataset.cellindex
     var index = section * 2 + cell
+
+    var isEdit = this.data.functionEditsStatus[index]
+    if(isEdit){
+      return;
+    }
+
     console.log(index)
     if (index > 28) {
       return;
@@ -330,6 +428,10 @@ Page({
     app.globalData.car = selCar;
     this.setData({
       car: selCar
+    })
+    wx.setStorage({
+      key: 'cars',
+      data: this.data.cars,
     })
   },
 
