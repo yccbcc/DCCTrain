@@ -482,12 +482,11 @@ Page({
       success(res) {
         // tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = res.tempFilePaths
-        console.log(res)
-        that.data.car.image = tempFilePaths[0];
-        that.updateSelCar({},true)
-      },
-      fail: function(error) {
-        console.log(error)
+        wx.redirectTo({
+          url: `./cut/cut?src=${src}`
+        })
+        // that.data.car.image = tempFilePaths[0];
+        // that.updateSelCar({},true)
       }
     })
   },
