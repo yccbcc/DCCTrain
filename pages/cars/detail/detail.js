@@ -121,7 +121,8 @@ Page({
       for (let i = 0; i <= 32; i++) {
         value['F' + i] = {
           name: 'F' + i,
-          isSelected: false
+          isSelected: false,
+          minName: 'F' + i,
         };
       }
       app.globalData.cars.push(value);

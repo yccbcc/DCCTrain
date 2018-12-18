@@ -46,12 +46,29 @@
   position: relative;
 }
 
-canvas {
+.slipView>image{
   margin-left: 5%;
   margin-right: 5%;
   width: 90%;
   background-color: lightgray;
   position: relative;
+  flex-shrink: 0;
+}
+
+/* .coverView {
+  width: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+} */
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  width: 90%;
   flex-shrink: 0;
 }
 

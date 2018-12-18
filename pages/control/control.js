@@ -110,19 +110,19 @@ Page({
   onShow: function() {
     this.initBle();
 
-    const ctx = wx.createCanvasContext('speedCanvas')
+    // const ctx = wx.createCanvasContext('speedCanvas')
 
-    // Create linear gradient
-    var width = app.globalData.windowWidth * 0.3 * 0.9
-    const grd = ctx.createLinearGradient(0, 0, 0, this.data.canvasHeight)
-    grd.addColorStop(0, 'red')
-    grd.addColorStop(0.5, 'yellow')
-    grd.addColorStop(1, 'green')
+    // // Create linear gradient
+    // var width = app.globalData.windowWidth * 0.3 * 0.9
+    // const grd = ctx.createLinearGradient(0, 0, 0, this.data.canvasHeight)
+    // grd.addColorStop(0, 'red')
+    // grd.addColorStop(0.5, 'yellow')
+    // grd.addColorStop(1, 'green')
 
-    // Fill with gradient
-    ctx.setFillStyle(grd)
-    ctx.fillRect(0, 0, width, this.data.canvasHeight)
-    ctx.draw()
+    // // Fill with gradient
+    // ctx.setFillStyle(grd)
+    // ctx.fillRect(0, 0, width, this.data.canvasHeight)
+    // ctx.draw()
   },
   onHide: function() {
     this.clearBle();
@@ -209,7 +209,7 @@ Page({
     for (let i = 0; i <= 32; i++) {
       car[`F${i}`].isSelected = false;
     }
-    this.updateSelCar({})
+    this.updateSelCar({},false)
     bleManager.writeMsg({
       type: bleManager.type.functionTap_write,
       functionIndex: 0
@@ -285,7 +285,7 @@ Page({
       this.setData({
         functionNames: functionNames
       })
-      this.updateSelCar({})
+      this.updateSelCar({},true)
     }
   },
   bindblur: function(e) {
@@ -320,31 +320,13 @@ Page({
       return;
     }
     this.data.car[`F${index}`].isSelected = !this.data.car[`F${index}`].isSelected
-    this.updateSelCar({})
+    this.updateSelCar({},false)
     bleManager.writeMsg({
       type: bleManager.type.functionTap_write,
       functionIndex: index
     })
   },
 
-  // 滑块事件
-  bindtouchstart: function(e) {
-    var y = e.changedTouches[0].y;
-    this.handleSlidY(y, false)
-  },
-  bindtouchmove: function(e) {
-    var y = e.changedTouches[0].y;
-    if (y < 0) {
-      y = 0
-    } else if (y > this.data.canvasHeight) {
-      y = this.data.canvasHeight
-    }
-    this.handleSlidY(y, false)
-  },
-
-  bindtouchend: function(e) {
-
-  },
   //下方功能键
   stopTap: function() {
     this.handleSlidY(this.data.canvasHeight, false)
@@ -355,11 +337,30 @@ Page({
 
   directionTap: function() {
     this.data.car.direction = this.data.car.direction == 0 ? 1 : 0;
-    this.updateSelCar({})
+    this.updateSelCar({},false)
     this.writeSpeed(this.data.car.speed)
   },
-  handleSlidY: function(y, isSoonStop) {
+  
+  // 滑块事件
+  bindtouchstart: function (e) {
+    var y = e.changedTouches[0].y;
+    this.handleSlidY(y, false)
+  },
+  bindtouchmove: function (e) {
+    var y = e.changedTouches[0].y;
+    if (y < 0) {
+      y = 0
+    } else if (y > this.data.canvasHeight) {
+      y = this.data.canvasHeight
+    }
+    this.handleSlidY(y, false)
+  },
 
+  bindtouchend: function (e) {
+
+  },
+  handleSlidY: function (y, isSoonStop) {
+console.log(y)
     var names = this.data.dangWeiNames
     for (let i = 0; i < names.length; i++) {
       this.data.car[names[i]].isSelected = false;
@@ -370,14 +371,13 @@ Page({
       var a = (this.data.canvasHeight - y) / this.data.canvasHeight
       var speed = parseInt(maxSpeed * a)
       this.data.car.speed = speed;
-      this.updateSelCar({})
+      this.updateSelCar({}, false)
       this.writeSpeed(speed)
     } else {
       this.data.car.speed = 0;
-      this.updateSelCar({})
+      this.updateSelCar({}, false)
       this.writeSpeed(-1)
     }
-
   },
   //档位变化
   dangWeiClick: function(e) {
@@ -402,8 +402,7 @@ Page({
     }
     this.data.car[name].isSelected = true;
     this.data.car.speed = speed;
-    this.updateSelCar({})
-
+    this.updateSelCar({},false)
     this.writeSpeed(speed)
   },
 
@@ -415,7 +414,7 @@ Page({
     })
   },
   //更新数据 和 ui
-  updateSelCar: function(para) {
+  updateSelCar: function(para,isNeedReStorage) {
     var selCar = Object.assign({}, this.data.car, para)
     for (let i in this.data.cars) {
       var car = this.data.cars[i]
@@ -429,37 +428,12 @@ Page({
     this.setData({
       car: selCar
     })
-    wx.setStorage({
-      key: 'cars',
-      data: this.data.cars,
-    })
-  },
-
-
-
-  // 滑块事件
-  bindtouchstartSpeed: function(e) {
-    var x = e.changedTouches[0].clientX
-    this.data.leftMoveStartX = x;
-  },
-  bindtouchmoveSpeed: function(e) {
-    var x = e.changedTouches[0].clientX
-    console.log(e.changedTouches[0])
-    this.setData({
-      leftMove: 50 + x - this.data.leftMoveStartX
-    })
-  },
-
-  bindtouchendSpeed: function(e) {
-    var leftMove = 0
-    if (this.data.leftMove > 100) {
-      leftMove = 200
-    } else {
-      leftMove = 50
+    if (isNeedReStorage){
+      wx.setStorage({
+        key: 'cars',
+        data: this.data.cars,
+      })
     }
-    this.setData({
-      leftMove: leftMove
-    })
   },
 
 
@@ -476,7 +450,7 @@ Page({
         const tempFilePaths = res.tempFilePaths
         console.log(res)
         that.data.car.image = tempFilePaths[0];
-        that.updateSelCar({})
+        that.updateSelCar({},true)
         wx.setStorage({
           key: 'cars',
           data: app.globalData.cars,
