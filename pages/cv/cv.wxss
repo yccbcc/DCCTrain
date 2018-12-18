@@ -8,27 +8,24 @@
 }
 
 #cvBox {
-  margin-top: 80rpx;
+  margin-top: 40rpx;
   margin-bottom: 50rpx;
   width: 90%;
   border: solid 4rpx lightgray;
-  position: relative;
   border-radius: 19rpx;
 }
 
 #cvBox>text:first-child {
   display: inline-block;
   height: 30rpx;
-  position: relative;
-  top: -34rpx;
+  margin-top: 10rpx;
   background-color: #fff;
   margin-left: 20rpx;
   font-size: 30rpx;
 }
 
 #cvContentView {
-  position: relative;
-  top: -20rpx;
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
 }
@@ -39,13 +36,22 @@
   width: 100%;
 }
 
-#cvContent-topView>view {
+#cvContent-top-leftInput {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
 }
 
-#cvContent-topView>view:first-child input {
+#cvContent-top-leftInput>view {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+#cvContent-top-leftInput>view>view {
+  width: 70px;
+}
+
+#cvContent-top-leftInput input {
   width: 150rpx;
   height: 60rpx;
   border: solid 4rpx lightgray;
@@ -53,14 +59,22 @@
   margin-left: 20rpx;
 }
 
-#cvContent-topView>view:last-child view {
-  width: 100rpx;
-  height: 60rpx;
+#cvContent-top-rightBtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+#cvContent-top-rightBtn view {
+  margin-top: 15px;
+  width: 50px;
+  height: 50px;
   border: solid 4rpx black;
-  background-color: lightgray;
+  background-color: white;
   margin-left: 30rpx;
   border-radius: 8rpx;
   text-align: center;
+  line-height: 50px;
 }
 
 #cvContent-bottom {
@@ -68,24 +82,29 @@
   flex-direction: row;
 }
 
-
-
-.group{
+.group {
   display: flex;
   flex-direction: row;
   margin-top: 20rpx;
   flex-wrap: wrap;
 }
-.group>view{
+
+.group>view {
   margin-left: 5rpx;
 }
 
-.electric_topBgView{
+.electric_topBgView {
   position: relative;
 }
-.electric_topBgView input{
+
+.electric_topBgView input {
   width: 200rpx;
   height: 80rpx;
   border: solid 4rpx lightgray;
   border-radius: 8rpx;
+}
+
+.electric_topBgView text {
+  border-radius: 4px;
+  font-size: 16px;
 }

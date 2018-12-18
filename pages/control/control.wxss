@@ -14,7 +14,7 @@
   box-sizing: border-box;
 }
 
-/* 中间视图 左侧 */
+/* 中间视图 左侧: 机车地址  机车列表  速度滑动 */
 
 .mid-leftView {
   display: flex;
@@ -78,7 +78,7 @@ canvas view {
   border-bottom: solid 2rpx lightgray;
 }
 
-/* 中间视图 右侧 */
+/* 中间视图 右侧: 图片 / 档位 / 功能键 */
 
 .mid-rightView {
   display: flex;
@@ -88,6 +88,7 @@ canvas view {
   height: 100%;
 }
 
+/* 图片 */
 .mid-right-topView {
   display: flex;
   width: 100%;
@@ -104,12 +105,14 @@ canvas view {
   box-sizing: border-box;
 }
 
+/* 速度展示/档位/急停 */
 .mid-right-bottom-leftView {
   width: 30%;
   display: flex;
   flex-direction: column;
 }
 
+/* 速度展示 */
 .mid-right-bottom-leftView>view:first-child>view:first-child {
   width: 80%;
   height: 40px;
@@ -120,23 +123,10 @@ canvas view {
   line-height: 36px;
   border-radius: 4px;
 }
-
+/* 档位 */
 .mid-right-bottom-leftView>view:first-child>view:last-child {
   display: flex;
   flex-direction: row;
-  margin-top: 15px;
-}
-
-.mid-right-bottom-leftView>view:last-child {
-  border: solid 2px slategray;
-  border-radius: 4px;
-  width: 80%;
-  height: 40px;
-  text-align: center;
-  margin: 20px auto;
-  line-height: 36px;
-  background-color: red;
-  box-sizing: border-box;
 }
 
 .mid-righ-bottom-left-IIIV {
@@ -147,12 +137,26 @@ canvas view {
 }
 
 .mid-righ-bottom-left-IIIV view {
-  margin-bottom: 10px;
+  margin-top: 10px;
   border: solid 2px lightgray;
   border-radius: 4px;
-  height: 30px;
-  line-height: 30px;
+  height: 45px;
+  line-height: 45px;
   text-align: center;
+  box-sizing: border-box;
+}
+
+/* 急停 */
+.mid-right-bottom-leftView>view:last-child {
+  border: solid 2px slategray;
+  border-radius: 4px;
+  width: 80%;
+  height: 50px;
+  text-align: center;
+  margin: 10px auto;
+  line-height: 46px;
+  background-color: red;
+  box-sizing: border-box;
 }
 
 .mid-right-bottom-rightView {
@@ -167,7 +171,20 @@ canvas view {
   flex-direction: row;
 }
 
-.mid-right-bottom-rightView>view:first-child>view {
+.mid-right-bottom-rightView>view:first-child>view:first-child {
+  width: 45%;
+  margin-left: 5%;
+  border: solid 2px lightgray;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mid-right-bottom-rightView>view:first-child>view:last-child {
   width: 45%;
   margin-left: 5%;
   border: solid 2px lightgray;
@@ -192,7 +209,6 @@ canvas view {
   position: relative;
   width: 45%;
   margin-left: 5%;
-  height: 50px;
   border: solid 2px lightgray;
   border-radius: 4px;
   box-sizing: border-box;
@@ -228,9 +244,8 @@ canvas view {
 
 .bottomView {
   position: fixed;
-  width: 80%;
-  padding: 5px 10% 5px 10%;
-  margin-left: 10%;
+  width: 100%;
+  padding: 5px 3%;
   display: flex;
   flex-direction: row;
   bottom: 0;
@@ -239,7 +254,7 @@ canvas view {
 }
 
 .bottomView>view {
-  width: 45%;
+  width: 42%;
   border: solid 2px black;
   display: flex;
   flex-direction: row;

@@ -203,13 +203,44 @@ Page({
       isShowCarList: !this.data.isShowCarList
     })
   },
+  //车辆点击事件  改变选中和车辆相关
+  cellTap: function (e) {
+    var index = e.currentTarget.dataset.index
+    var selCar = this.data.cars[index]
+    if (selCar.isSelected) {
+      this.setData({
+        isShowCarList: false
+      })
+      return;
+    }
+    for (var i in this.data.cars) {
+      var car = this.data.cars[i];
+      car.isSelected = false;
+    }
+    selCar.isSelected = true;
+    this.data.car = selCar;
+    var functionNames = this.initFunctionNames()
+    this.setData({
+      isShowCarList: false,
+      currentSel: index,
+      car: selCar,
+      cars: this.data.cars,
+      functionNames: functionNames
+    })
+    app.globalData.cars = this.data.cars;
+    app.globalData.car = selCar;
+    wx.setStorage({
+      key: 'cars',
+      data: this.data.cars,
+    })
+  },
   //功能键复位
   functionResetTap: function() {
     var car = this.data.car;
     for (let i = 0; i <= 32; i++) {
       car[`F${i}`].isSelected = false;
     }
-    this.updateSelCar({})
+    this.updateSelCar({},false)
     bleManager.writeMsg({
       type: bleManager.type.functionTap_write,
       functionIndex: 0
@@ -231,33 +262,7 @@ Page({
       functionIndex: 21
     })
   },
-  //车辆点击事件  改变选中和车辆相关
-  cellTap: function(e) {
-    var index = e.currentTarget.dataset.index
-    var selCar = this.data.cars[index]
-    if (selCar.isSelected) {
-      return;
-    }
-    for (var i in this.data.cars) {
-      var car = this.data.cars[i];
-      car.isSelected = false;
-    }
-    selCar.isSelected = true;
-    this.data.car = selCar;
-    var functionNames = this.initFunctionNames()
-    this.setData({
-      currentSel: index,
-      car: selCar,
-      cars: this.data.cars,
-      functionNames: functionNames
-    })
-    app.globalData.cars = this.data.cars;
-    app.globalData.car = selCar;
-    wx.setStorage({
-      key: 'cars',
-      data: this.data.cars,
-    })
-  },
+  
 
 
   //功能键长恩事件
@@ -285,7 +290,7 @@ Page({
       this.setData({
         functionNames: functionNames
       })
-      this.updateSelCar({})
+      this.updateSelCar({},true)
     }
   },
   bindblur: function(e) {
@@ -320,7 +325,7 @@ Page({
       return;
     }
     this.data.car[`F${index}`].isSelected = !this.data.car[`F${index}`].isSelected
-    this.updateSelCar({})
+    this.updateSelCar({},false)
     bleManager.writeMsg({
       type: bleManager.type.functionTap_write,
       functionIndex: index
@@ -355,7 +360,7 @@ Page({
 
   directionTap: function() {
     this.data.car.direction = this.data.car.direction == 0 ? 1 : 0;
-    this.updateSelCar({})
+    this.updateSelCar({},false)
     this.writeSpeed(this.data.car.speed)
   },
   handleSlidY: function(y, isSoonStop) {
@@ -370,11 +375,11 @@ Page({
       var a = (this.data.canvasHeight - y) / this.data.canvasHeight
       var speed = parseInt(maxSpeed * a)
       this.data.car.speed = speed;
-      this.updateSelCar({})
+      this.updateSelCar({},false)
       this.writeSpeed(speed)
     } else {
       this.data.car.speed = 0;
-      this.updateSelCar({})
+      this.updateSelCar({},false)
       this.writeSpeed(-1)
     }
 
@@ -402,7 +407,7 @@ Page({
     }
     this.data.car[name].isSelected = true;
     this.data.car.speed = speed;
-    this.updateSelCar({})
+    this.updateSelCar({},false)
 
     this.writeSpeed(speed)
   },
@@ -415,7 +420,7 @@ Page({
     })
   },
   //更新数据 和 ui
-  updateSelCar: function(para) {
+  updateSelCar: function(para,isNeedStorage) {
     var selCar = Object.assign({}, this.data.car, para)
     for (let i in this.data.cars) {
       var car = this.data.cars[i]
@@ -429,10 +434,13 @@ Page({
     this.setData({
       car: selCar
     })
-    wx.setStorage({
-      key: 'cars',
-      data: this.data.cars,
-    })
+    if (isNeedStorage){
+      wx.setStorage({
+        key: 'cars',
+        data: this.data.cars,
+      })
+    }
+    
   },
 
 
@@ -476,12 +484,7 @@ Page({
         const tempFilePaths = res.tempFilePaths
         console.log(res)
         that.data.car.image = tempFilePaths[0];
-        that.updateSelCar({})
-        wx.setStorage({
-          key: 'cars',
-          data: app.globalData.cars,
-        })
-        console.log(app.globalData.cars)
+        that.updateSelCar({},true)
       },
       fail: function(error) {
         console.log(error)

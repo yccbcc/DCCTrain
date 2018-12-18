@@ -5,6 +5,6 @@
   </view>
   <view>
     <text style='background-color:{{electriced ? "green" : "red"}}' bindtap='electricTap'>电源</text>
-    <text style='background-color:{{connected ? "green" : "red"}}'>通信</text>
+    <text style='background-color:{{connected ? "blue" : "red"}}'>通信</text>
   </view>
 </view>

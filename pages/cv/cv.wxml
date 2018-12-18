@@ -1,18 +1,25 @@
 <!--pages/CV/cv.wxml-->
 <view class="container">
   <include src="/pages/common/electric/electric.wxml" />
-  <view id='cvBoxBgView' style='margin-top:120rpx;'>
+  <view id='cvBoxBgView'>
     <view id='cvBox'>
       <text>CV-Box</text>
       <view id='cvContentView'>
         <view id='cvContent-topView'>
           <view id='cvContent-top-leftInput'>
-            <input placeholder='0' type='number' bindinput='bindinputCVLeft'></input>
-            <input placeholder='0' type='number' bindinput='bindinputCVRight' value='{{cvValueRightTxt}}'></input>
+            <view>
+              <view>cv地址:</view>
+              <input placeholder='0' type='number' bindinput='bindinputCVLeft'></input>
+            </view>
+            <view>
+              <view>cv值:</view>
+              <input placeholder='0' type='number' bindinput='bindinputCVRight' value='{{cvValueRightTxt}}'></input>
+            </view>
+
           </view>
           <view id='cvContent-top-rightBtn'>
-            <view bindtap='cvValueGetTap'>Get</view>
-            <view bindtap='cvValueSetTap'>Set</view>
+            <view bindtap='cvValueGetTap'>获取</view>
+            <view bindtap='cvValueSetTap'>写入</view>
           </view>
         </view>
         <view id='cvContent-bottom'>
@@ -25,19 +32,18 @@
           </checkbox-group>
         </view>
       </view>
-
     </view>
   </view>
 
-<view class='electric_topBgView'>
-  <view>
-    <text class='topElectricTxt'>机车地址:</text>
-    <input class='topElectricShowTxt' type='number' bindinput='bindinputAddress' value='{{cvAddressNum}}'></input>
+  <view class='electric_topBgView'>
+    <view>
+      <text class='topElectricTxt'>机车地址:</text>
+      <input class='topElectricShowTxt' type='number' bindinput='bindinputAddress' value='{{cvAddressNum}}'></input>
+    </view>
+    <view>
+      <text style='background-color:white;' bindtap='cvAddressGetTap'>获取</text>
+      <text style='background-color:white' bindtap='cvAddressSetTap'>写入</text>
+    </view>
   </view>
-  <view>
-    <text style='background-color:lightgray' bindtap='cvAddressGetTap'>Get</text>
-    <text style='background-color:lightgray' bindtap='cvAddressSetTap'>Set</text>
-  </view>
-</view>
 
 </view>
