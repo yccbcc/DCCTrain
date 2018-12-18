@@ -203,6 +203,37 @@ Page({
       isShowCarList: !this.data.isShowCarList
     })
   },
+  //车辆点击事件  改变选中和车辆相关
+  cellTap: function (e) {
+    var index = e.currentTarget.dataset.index
+    var selCar = this.data.cars[index]
+    if (selCar.isSelected) {
+      this.setData({
+        isShowCarList: false
+      })
+      return;
+    }
+    for (var i in this.data.cars) {
+      var car = this.data.cars[i];
+      car.isSelected = false;
+    }
+    selCar.isSelected = true;
+    this.data.car = selCar;
+    var functionNames = this.initFunctionNames()
+    this.setData({
+      isShowCarList: false,
+      currentSel: index,
+      car: selCar,
+      cars: this.data.cars,
+      functionNames: functionNames
+    })
+    app.globalData.cars = this.data.cars;
+    app.globalData.car = selCar;
+    wx.setStorage({
+      key: 'cars',
+      data: this.data.cars,
+    })
+  },
   //功能键复位
   functionResetTap: function() {
     var car = this.data.car;
@@ -231,33 +262,7 @@ Page({
       functionIndex: 21
     })
   },
-  //车辆点击事件  改变选中和车辆相关
-  cellTap: function(e) {
-    var index = e.currentTarget.dataset.index
-    var selCar = this.data.cars[index]
-    if (selCar.isSelected) {
-      return;
-    }
-    for (var i in this.data.cars) {
-      var car = this.data.cars[i];
-      car.isSelected = false;
-    }
-    selCar.isSelected = true;
-    this.data.car = selCar;
-    var functionNames = this.initFunctionNames()
-    this.setData({
-      currentSel: index,
-      car: selCar,
-      cars: this.data.cars,
-      functionNames: functionNames
-    })
-    app.globalData.cars = this.data.cars;
-    app.globalData.car = selCar;
-    wx.setStorage({
-      key: 'cars',
-      data: this.data.cars,
-    })
-  },
+  
 
 
   //功能键长恩事件
@@ -327,14 +332,6 @@ Page({
     })
   },
 
-  //下方功能键
-  stopTap: function() {
-    this.handleSlidY(this.data.canvasHeight, false)
-  },
-  soonStopTap: function() {
-    this.handleSlidY(-1, true)
-  },
-
   directionTap: function() {
     this.data.car.direction = this.data.car.direction == 0 ? 1 : 0;
     this.updateSelCar({},false)
@@ -359,8 +356,21 @@ Page({
   bindtouchend: function (e) {
 
   },
-  handleSlidY: function (y, isSoonStop) {
-console.log(y)
+
+  //下方功能键
+  stopTap: function() {
+    this.handleSlidY(this.data.canvasHeight, false)
+  },
+  soonStopTap: function() {
+    this.handleSlidY(-1, true)
+  },
+
+  directionTap: function() {
+    this.data.car.direction = this.data.car.direction == 0 ? 1 : 0;
+    this.updateSelCar({},false)
+    this.writeSpeed(this.data.car.speed)
+  },
+  handleSlidY: function(y, isSoonStop) {
     var names = this.data.dangWeiNames
     for (let i = 0; i < names.length; i++) {
       this.data.car[names[i]].isSelected = false;
@@ -414,7 +424,8 @@ console.log(y)
     })
   },
   //更新数据 和 ui
-  updateSelCar: function(para,isNeedReStorage) {
+
+  updateSelCar: function(para,isNeedStorage) {
     var selCar = Object.assign({}, this.data.car, para)
     for (let i in this.data.cars) {
       var car = this.data.cars[i]
@@ -428,12 +439,13 @@ console.log(y)
     this.setData({
       car: selCar
     })
-    if (isNeedReStorage){
+    if (isNeedStorage){
       wx.setStorage({
         key: 'cars',
         data: this.data.cars,
       })
     }
+    
   },
 
 
@@ -448,17 +460,12 @@ console.log(y)
       success(res) {
         // tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = res.tempFilePaths
-        console.log(res)
-        that.data.car.image = tempFilePaths[0];
-        that.updateSelCar({},true)
-        wx.setStorage({
-          key: 'cars',
-          data: app.globalData.cars,
+        var src = tempFilePaths[0]
+        wx.redirectTo({
+          url: `./cut/cut?src=${src}`
         })
-        console.log(app.globalData.cars)
-      },
-      fail: function(error) {
-        console.log(error)
+        // that.data.car.image = tempFilePaths[0];
+        // that.updateSelCar({},true)
       }
     })
   },

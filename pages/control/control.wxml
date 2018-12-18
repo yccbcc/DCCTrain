@@ -1,12 +1,14 @@
 <!--pages/control/control.wxml-->
+<import src="../../we-cropper/we-cropper.wxml"/>
+<wxs module="filter" src="../common/number.wxs"></wxs>
 <view class="container">
   <include src="/pages/common/electric/electric.wxml" />
 
   <view class='midView' style="height:{{middleViewHeight}}px">
     <view class='mid-leftView'>
       <view class='mid-left-topView' style='height:{{middleTopHeight}}px'>
-        <view style='font-size:26rpx;margin-top:15rpx;margin-left:20rpx;'>名称:{{car.name}}</view>
-        <view style='font-size:26rpx;margin-left:20rpx;'>地址:{{car.cab}}</view>
+        <view style='font-size:15px;margin-top:15rpx;margin-left:20rpx;'>名称:{{car.name}}</view>
+        <view style='font-size:15px;margin-left:20rpx;'>地址:{{car.cab}}</view>
       </view>
       <view id='selectedCarBtn' style='height:{{selectedCarHeight}}px' bindtap='showCarsListTap'>选择机车</view>
       <view class='slipView' style='height:{{canvasHeight}}px'>
@@ -23,25 +25,28 @@
     </view>
     <view class='mid-rightView'>
       <view class='mid-right-topView' style='height:{{middleTopHeight}}px'>
-        <image style='width:100%;height:100%;margin:0 auto;' mode='scaleToFill' src='{{car.image}}' bindtap='imageTap'></image>
+        <image style='width:100%;height:100%;margin:0 auto;' mode='aspectFill' src='{{car.image}}' bindtap='imageTap'></image>
       </view>
       <view class='mid-right-bottomView' style='height:{{middleViewHeight - middleTopHeight}}px'>
         <view class='mid-right-bottom-leftView'>
           <view>
-            <view>{{car.direction == 1 ? car.speed + "＞" : "＜" + car.speed}}</view>
+            <view style='height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px'>{{car.direction == 1 ? filter.numberToFixZero(car.speed * 100 / car.maxSpeed) + "＞" : "＜" + filter.numberToFixZero(car.speed * 100 / car.maxSpeed)}}</view>
             <view>
               <view class='mid-righ-bottom-left-IIIV'>
-                <view wx:key style='background-color:{{car[item].isSelected ? "lightgray" : "white"}}' wx:for="{{dangWeiNames}}" bindtap='dangWeiClick' data-index="{{index}}">{{item}}</view>
+                <view wx:key style='background-color:{{car[item].isSelected ? "lightgray" : "white"}};height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px' wx:for="{{dangWeiNames}}" bindtap='dangWeiClick' data-index="{{index}}">{{item}}</view>
               </view>
             </view>
           </view>
-          <view bindtap='soonStopTap'>
+          <view bindtap='soonStopTap' style='height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px'>
             <text>{{"急停"}}</text>
           </view>
         </view>
         <view class='mid-right-bottom-rightView'>
           <view style='height:{{functionBtnHeight}}px'>
-            <view bindtap='functionResetTap' style='height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px'>复位</view>
+            <view bindtap='functionResetTap' style='height:{{functionBtnHeight}}px;'>
+              <view>功能键</view>
+              <view>复位</view>
+            </view>
             <view bindtap='functionBtnTap' data-sectionindex="{{0}}" data-cellindex="{{0}}" style="background-color:{{car['F0'].isSelected ? 'lightgray' : 'white'}};height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px">F0</view>
           </view>
           <scroll-view class='functionsBgScrollView' scroll-y style="height:{{middleViewHeight - middleTopHeight - functionBtnHeight - functionSpaceHeight}}px">
