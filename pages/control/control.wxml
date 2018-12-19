@@ -1,5 +1,5 @@
 <!--pages/control/control.wxml-->
-<import src="../../we-cropper/we-cropper.wxml"/>
+<import src="../../we-cropper/we-cropper.wxml" />
 <wxs module="filter" src="../common/number.wxs"></wxs>
 <view class="container">
   <include src="/pages/common/electric/electric.wxml" />
@@ -7,8 +7,8 @@
   <view class='midView' style="height:{{middleViewHeight}}px">
     <view class='mid-leftView'>
       <view class='mid-left-topView' style='height:{{middleTopHeight}}px'>
-        <view style='font-size:15px;margin-top:15rpx;margin-left:20rpx;'>名称:{{car.name}}</view>
-        <view style='font-size:15px;margin-left:20rpx;'>地址:{{car.cab}}</view>
+        <view style='font-size:10px;margin-top:15rpx;margin-left:15rpx;'>名称:{{car.name}}</view>
+        <view style='font-size:10px;margin-left:15rpx;'>地址:{{car.cab}}</view>
       </view>
       <view id='selectedCarBtn' style='height:{{selectedCarHeight}}px' bindtap='showCarsListTap'>选择机车</view>
       <view class='slipView' style='height:{{canvasHeight}}px'>
@@ -17,9 +17,12 @@
         <canvas wx:if="{{!isShowCarList}}" style='height:{{canvasHeight}}px' canvas-id="speedCanvas" disable-scroll="{{true}}" bindtouchstart="bindtouchstart" bindtouchmove="bindtouchmove" bindtouchend="bindtouchend">
           <view style='background-color:lightgray;height:{{( (car.maxSpeed - car.speed) / car.maxSpeed) * canvasHeight}}px'></view>
         </canvas>
-        <scroll-view wx:if="{{isShowCarList}}" class='mid-left-bottomSv' scroll-y style="height:{{middleViewHeight - middleTopHeight}}px;">
-          <view class='mid-left-bottomSv-cell' wx:key wx:for="{{cars}}" style="background-color:{{index==currentSel?'lightgray':'white'}}" data-index="{{index}}" bindtap='cellTap'>{{item.name}}</view>
-        </scroll-view>
+        <view wx:if="{{isShowCarList}}" style="height:{{middleViewHeight - middleTopHeight - selectedCarHeight - 5}}px;">
+          <input bindinput="bindinput" placeholder='搜索' style='height:35px;margin-bottom:5px;'></input>
+          <scroll-view class='mid-left-bottomSv' scroll-y style="height:{{middleViewHeight - middleTopHeight - selectedCarHeight - 5 - 35 - 5}}px;top:35px;">
+            <view class='mid-left-bottomSv-cell' wx:key wx:for="{{showCars}}" style="background-color:{{item.isSelected?'lightgray':'white'}}" data-index="{{index}}" bindtap='cellTap'>{{item.name}}</view>
+          </scroll-view>
+        </view>
       </view>
 
     </view>

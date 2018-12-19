@@ -1,9 +1,9 @@
-//app.js 测试
+
 
 App({
 
   onLaunch: function() {
-
+    
     var model = wx.getSystemInfoSync().model
     this.globalData.isiPhone = model.substr(0, 6) == 'iPhone'
     this.globalData.windowWidth = wx.getSystemInfoSync().windowWidth
@@ -11,7 +11,7 @@ App({
 
     var cars = wx.getStorageSync('cars')
     if (cars) {
-      
+
       for (var i in cars) {
         var everyCar = cars[i]
         everyCar.speed = 0;
@@ -26,9 +26,9 @@ App({
           var value = dangValue[3 - j]
           everyCar[name].isSelected = false
         }
-        
+
       }
-      
+
       this.globalData.cars = cars;
       for (let i in cars) {
         var car = cars[0]
@@ -43,7 +43,8 @@ App({
           defCar[`F${i}`] = {
             name: `F${i}`,
             isSelected: false,
-            minName: 'F' + i
+            minName: 'F' + i,
+            lockNum:0,
           }
         }
         var dangName = ["IV", "III", "II", "I"]
@@ -108,8 +109,22 @@ App({
 
     cars: null, //当前拥有的所有车辆
     car: null, //当前车辆
-    defCars: [{ //默认车库 两辆车
-        id: '00000001', //id
+    defCars: [
+      {
+        id: '00000001',
+        isDefault: true,
+        isSelected: false,
+        speed: 0,
+        register: 1,
+        direction: 0,
+        'type': '模拟',
+        'name': '模拟',
+        'image': '/images/control/car_bg.png',
+        'cab': '99',
+        'maxSpeed': 126
+      },
+      { //默认车库 两辆车
+        id: '00000002', //id
         isDefault: true, //默认车辆禁止修改
         isSelected: true,
         speed: 0, //当前速度
@@ -122,20 +137,6 @@ App({
         'maxSpeed': 126, //最高速度
         //'I': { name: 'I', value: 25, isSelected: false}
         // 'F0': { 'name': 'F0', isSelected:false} // f0 - f32
-      },
-
-      {
-        id: '00000002',
-        isDefault: true,
-        isSelected: false,
-        speed: 0,
-        register: 1,
-        direction: 0,
-        'type': '模拟',
-        'name': '模拟',
-        'image': '/images/control/car_bg.png',
-        'cab': '99',
-        'maxSpeed': 126
       }
     ]
   }

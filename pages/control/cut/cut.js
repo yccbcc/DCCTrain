@@ -32,9 +32,13 @@ Page({
   getCropperImage() {
     this.wecropper.getCropperImage((avatar) => {
       if (avatar) {
+
+        var pages = getCurrentPages()
+        var controlPage = pages[pages.length - 2];
+        controlPage.data.car.image = avatar
+        //console.log(pages)
         //  获取到裁剪后的图片
-        wx.redirectTo({
-          url: `../control?avatar=${avatar}`
+        wx.navigateBack({
         })
       } else {
         console.log('获取图片失败，请稍后重试')
@@ -51,7 +55,6 @@ Page({
       success(res) {
         const src = res.tempFilePaths[0]
         //  获取裁剪图片资源后，给data添加src属性及其值
-
         self.wecropper.pushOrign(src)
       }
     })

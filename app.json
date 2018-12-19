@@ -6,7 +6,8 @@
     "pages/cars/detail/detail",
     "pages/cars/cars",
     "pages/ble/ble",
-    "pages/control/cut/cut/cut"
+    "pages/control/cut/cut",
+    "pages/control/function/function"
   ],
   "window": {
     "backgroundTextStyle": "light",

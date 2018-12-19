@@ -1,0 +1,8 @@
+<!--pages/control/function/function.wxml-->
+<view class='tableView'>
+  <view class='cell' wx:key wx:for="{{functionArr}}">
+  <view class='btn'>{{item.name}}</view>
+  <view class='selectedView'></view>
+  <input></input>
+  </view>
+</view>

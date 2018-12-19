@@ -29,8 +29,7 @@
 }
 
 #selectedCarBtn {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   flex-shrink: 0;
   width: 100%;
   border: solid 2px lightgray;
@@ -46,7 +45,7 @@
   position: relative;
 }
 
-.slipView>image{
+.slipView>image {
   margin-left: 5%;
   margin-right: 5%;
   width: 90%;
@@ -79,9 +78,21 @@ canvas view {
   right: 0;
 }
 
+.slipView>view:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.slipView input {
+  width: 100%;
+  border: solid 2px lightgray;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
 .mid-left-bottomSv {
   position: absolute;
-  top: 0px;
   left: 0px;
   display: flex;
   flex-direction: column;
@@ -92,7 +103,8 @@ canvas view {
   font-size: 28rpx;
   height: 40px;
   line-height: 40px;
-  border-bottom: solid 2rpx lightgray;
+  border-bottom: solid 1rpx lightgray;
+  border-top: solid 1rpx lightgray;
 }
 
 /* 中间视图 右侧: 图片 / 档位 / 功能键 */
@@ -106,10 +118,10 @@ canvas view {
 }
 
 /* 图片 */
+
 .mid-right-topView {
   display: flex;
   width: 100%;
-  flex-basis: 100rpx;
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -123,6 +135,7 @@ canvas view {
 }
 
 /* 速度展示/档位/急停 */
+
 .mid-right-bottom-leftView {
   width: 30%;
   display: flex;
@@ -130,6 +143,7 @@ canvas view {
 }
 
 /* 速度展示 */
+
 .mid-right-bottom-leftView>view:first-child>view:first-child {
   width: 80%;
   height: 40px;
@@ -140,7 +154,9 @@ canvas view {
   line-height: 36px;
   border-radius: 4px;
 }
+
 /* 档位 */
+
 .mid-right-bottom-leftView>view:first-child>view:last-child {
   display: flex;
   flex-direction: row;
@@ -164,6 +180,7 @@ canvas view {
 }
 
 /* 急停 */
+
 .mid-right-bottom-leftView>view:last-child {
   border: solid 2px slategray;
   border-radius: 4px;

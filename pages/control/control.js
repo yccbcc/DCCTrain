@@ -38,21 +38,20 @@ Page({
     functionEditsStatus: [],
 
     //车辆选择
+    showCars: [],
     cars: null,
     car: null,
-    currentSel: 0,
   },
 
   onLoad: function(options) {
     //设置ui 以及 当前车辆
     var cars = app.globalData.cars;
+    var showCars = [].concat(cars)
     var car = null;
-    var currentSel = 0;
     for (let i = 0; i < cars.length; i++) {
       var everyCar = cars[i]
       if (everyCar.isSelected) {
         car = everyCar;
-        currentSel = i;
       }
     }
     this.data.car = car;
@@ -61,11 +60,11 @@ Page({
     for (var i = 1; i <= 28; i++) {
       functionEditsStatus.push(false)
     }
-    
+
 
     var middleViewHeight = app.globalData.windowHeight - (this.data.topViewHeight + this.data.bottomViewHeight)
     var functionHeight = (app.globalData.windowHeight - (this.data.topViewHeight + this.data.bottomViewHeight + this.data.middleTopHeight)) / 6 - this.data.functionSpaceHeight;
-    var canvasHeight = middleViewHeight - this.data.middleTopHeight - this.data.selectedCarHeight - 20 - 20;
+    var canvasHeight = middleViewHeight - this.data.middleTopHeight - this.data.selectedCarHeight - 20;
     this.setData({
       functionNames: functionNames,
       functionEditsStatus: functionEditsStatus,
@@ -73,11 +72,11 @@ Page({
       middleViewHeight: middleViewHeight,
       functionBtnHeight: functionHeight,
       cars: cars,
-      car: car,
-      currentSel: currentSel
+      showCars: showCars,
+      car: car
     })
   },
-  initFunctionNames:function(){
+  initFunctionNames: function() {
     var functionNames = [];
     var functionKeys = [
       ['F1', 'F2'],
@@ -109,20 +108,7 @@ Page({
   },
   onShow: function() {
     this.initBle();
-
-    // const ctx = wx.createCanvasContext('speedCanvas')
-
-    // // Create linear gradient
-    // var width = app.globalData.windowWidth * 0.3 * 0.9
-    // const grd = ctx.createLinearGradient(0, 0, 0, this.data.canvasHeight)
-    // grd.addColorStop(0, 'red')
-    // grd.addColorStop(0.5, 'yellow')
-    // grd.addColorStop(1, 'green')
-
-    // // Fill with gradient
-    // ctx.setFillStyle(grd)
-    // ctx.fillRect(0, 0, width, this.data.canvasHeight)
-    // ctx.draw()
+    this.updateSelCar({}, true)
   },
   onHide: function() {
     this.clearBle();
@@ -199,32 +185,67 @@ Page({
 
   //机车列表的展示与隐藏
   showCarsListTap: function() {
+    if (!this.data.isShowCarList){
+      this.setData({
+        isShowCarList: true,
+        showCars:[].concat(this.data.cars)
+      })
+    }else{
+      this.setData({
+        isShowCarList: false,
+      })
+    }
+  },
+  bindinput: function(e) {
+    var showCars = []
+    var value = e.detail.value
+    for (var i in this.data.cars) {
+      var car = this.data.cars[i];
+      if (car.name.indexOf(value) != -1) {
+        showCars.push(car)
+      }
+    }
     this.setData({
-      isShowCarList: !this.data.isShowCarList
+      showCars: [].concat(showCars)
     })
   },
+  refreshCarsList: function() {
+
+  },
   //车辆点击事件  改变选中和车辆相关
-  cellTap: function (e) {
+  cellTap: function(e) {
     var index = e.currentTarget.dataset.index
-    var selCar = this.data.cars[index]
+    var selCar = this.data.showCars[index]
     if (selCar.isSelected) {
       this.setData({
         isShowCarList: false
       })
       return;
     }
+    for (var i in this.data.showCars) {
+      var car = this.data.showCars[i];
+      car.isSelected = false;
+    }
+    selCar.isSelected = true;
+
     for (var i in this.data.cars) {
       var car = this.data.cars[i];
       car.isSelected = false;
     }
-    selCar.isSelected = true;
+    for (var i in this.data.cars) {
+      var car = this.data.cars[i];
+      if (car.id == selCar.id) {
+        car.isSelected = true;
+      }
+    }
+
     this.data.car = selCar;
     var functionNames = this.initFunctionNames()
     this.setData({
       isShowCarList: false,
-      currentSel: index,
       car: selCar,
       cars: this.data.cars,
+      showCars: this.data.showCars,
       functionNames: functionNames
     })
     app.globalData.cars = this.data.cars;
@@ -234,13 +255,13 @@ Page({
       data: this.data.cars,
     })
   },
-  //功能键复位
+  //功能键复位 ************
   functionResetTap: function() {
     var car = this.data.car;
     for (let i = 0; i <= 32; i++) {
       car[`F${i}`].isSelected = false;
     }
-    this.updateSelCar({},false)
+    this.updateSelCar({}, false)
     bleManager.writeMsg({
       type: bleManager.type.functionTap_write,
       functionIndex: 0
@@ -262,35 +283,39 @@ Page({
       functionIndex: 21
     })
   },
-  
+
 
 
   //功能键长恩事件
   functionBtnLongTap: function(e) {
-    this.data.isLongPress = true;
-    var section = e.currentTarget.dataset.sectionindex
-    var cell = e.currentTarget.dataset.cellindex
-    var index = section * 2 + cell
-    this.data.functionEditsStatus[index] = true;
-    
-    this.setData({
-      functionEditsStatus: this.data.functionEditsStatus,
+    var carStr = JSON.stringify(this.data.car)
+    wx.navigateTo({
+      url: './function/function?car=' + carStr,
     })
+    // this.data.isLongPress = true;
+    // var section = e.currentTarget.dataset.sectionindex
+    // var cell = e.currentTarget.dataset.cellindex
+    // var index = section * 2 + cell
+    // this.data.functionEditsStatus[index] = true;
 
-    console.log(this.data.functionEditsStatus)
+    // this.setData({
+    //   functionEditsStatus: this.data.functionEditsStatus,
+    // })
+
+    // console.log(this.data.functionEditsStatus)
   },
   bindconfirm: function(e) {
     console.log(e)
     var section = e.currentTarget.dataset.sectionindex
     var cell = e.currentTarget.dataset.cellindex
     var index = section * 2 + cell
-    if(e.detail.value && e.detail.value.length > 0){
+    if (e.detail.value && e.detail.value.length > 0) {
       this.data.car[`F${index}`].name = e.detail.value;
       var functionNames = this.initFunctionNames();
       this.setData({
         functionNames: functionNames
       })
-      this.updateSelCar({},true)
+      this.updateSelCar({}, true)
     }
   },
   bindblur: function(e) {
@@ -306,7 +331,7 @@ Page({
 
   //功能键点击事件
   functionBtnTap: function(e) {
-    if (this.data.isLongPress){
+    if (this.data.isLongPress) {
       this.data.isLongPress = false;
       return;
     }
@@ -316,7 +341,7 @@ Page({
     var index = section * 2 + cell
 
     var isEdit = this.data.functionEditsStatus[index]
-    if(isEdit){
+    if (isEdit) {
       return;
     }
 
@@ -325,7 +350,7 @@ Page({
       return;
     }
     this.data.car[`F${index}`].isSelected = !this.data.car[`F${index}`].isSelected
-    this.updateSelCar({},false)
+    this.updateSelCar({}, false)
     bleManager.writeMsg({
       type: bleManager.type.functionTap_write,
       functionIndex: index
@@ -334,16 +359,16 @@ Page({
 
   directionTap: function() {
     this.data.car.direction = this.data.car.direction == 0 ? 1 : 0;
-    this.updateSelCar({},false)
+    this.updateSelCar({}, false)
     this.writeSpeed(this.data.car.speed)
   },
-  
+
   // 滑块事件
-  bindtouchstart: function (e) {
+  bindtouchstart: function(e) {
     var y = e.changedTouches[0].y;
     this.handleSlidY(y, false)
   },
-  bindtouchmove: function (e) {
+  bindtouchmove: function(e) {
     var y = e.changedTouches[0].y;
     if (y < 0) {
       y = 0
@@ -353,7 +378,7 @@ Page({
     this.handleSlidY(y, false)
   },
 
-  bindtouchend: function (e) {
+  bindtouchend: function(e) {
 
   },
 
@@ -367,7 +392,7 @@ Page({
 
   directionTap: function() {
     this.data.car.direction = this.data.car.direction == 0 ? 1 : 0;
-    this.updateSelCar({},false)
+    this.updateSelCar({}, false)
     this.writeSpeed(this.data.car.speed)
   },
   handleSlidY: function(y, isSoonStop) {
@@ -412,7 +437,7 @@ Page({
     }
     this.data.car[name].isSelected = true;
     this.data.car.speed = speed;
-    this.updateSelCar({},false)
+    this.updateSelCar({}, false)
     this.writeSpeed(speed)
   },
 
@@ -425,7 +450,7 @@ Page({
   },
   //更新数据 和 ui
 
-  updateSelCar: function(para,isNeedStorage) {
+  updateSelCar: function(para, isNeedStorage) {
     var selCar = Object.assign({}, this.data.car, para)
     for (let i in this.data.cars) {
       var car = this.data.cars[i]
@@ -439,13 +464,13 @@ Page({
     this.setData({
       car: selCar
     })
-    if (isNeedStorage){
+    if (isNeedStorage) {
       wx.setStorage({
         key: 'cars',
         data: this.data.cars,
       })
     }
-    
+
   },
 
 
@@ -461,7 +486,7 @@ Page({
         // tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = res.tempFilePaths
         var src = tempFilePaths[0]
-        wx.redirectTo({
+        wx.navigateTo({
           url: `./cut/cut?src=${src}`
         })
         // that.data.car.image = tempFilePaths[0];
