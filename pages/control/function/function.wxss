@@ -13,4 +13,100 @@
   border-bottom: solid 2rpx lightgray;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+
+.cell>view {
+  display: flex;
+  flex-direction: row;
+}
+
+.leftview {
+  margin-left: 10px;
+}
+
+.nameview {
+  width: 40px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+
+.inputview {
+  width: 80px;
+  height: 30px;
+  margin: 10px 10px;
+  line-height: 30px;
+  text-align: center;
+}
+
+input {
+  border: solid 1rpx lightgray;
+  border-radius: 4px;
+}
+
+.rightview {
+  margin-right: 10px;
+}
+
+.lockview{
+  width: 35px;
+  height: 35px;
+  line-height: 30px;
+  text-align: center;
+  margin-top: 7px;
+  margin-right: 5px;
+}
+
+image{
+  width: 100%;
+  height: 100%;
+}
+
+.toptimeview{
+  width: 80px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+
+.timeview {
+  width: 80px;
+  height: 40px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: row;
+}
+
+.timeview>view{
+  height: 40px;
+  width: 40px;
+}
+
+.timeview>view:first-child{
+  text-align: center;
+  line-height: 40px;
+  border: solid 1rpx lightblue;
+  box-sizing: border-box;
+}
+
+.timeview>view:last-child{
+  display: flex;
+  flex-direction: column;
+}
+
+.timeview>view:last-child>view{
+  width: 40px;
+  height: 20px;
+  border: solid 1rpx lightgray;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.zhishiImg{
+  width: 70%;
+  height: 70%;
+  
+
 }

@@ -1,8 +1,35 @@
 <!--pages/control/function/function.wxml-->
+<view class='cell'>
+  <view class='leftview'>
+    <view class='nameview'>按钮</view>
+    <view class='inputview'>名称</view>
+  </view>
+  <view class='rightview'>
+    <view class='lockview'>锁定</view>
+    <view class='toptimeview'>解锁时间</view>
+  </view>
+</view>
 <view class='tableView'>
   <view class='cell' wx:key wx:for="{{functionArr}}">
-  <view class='btn'>{{item.name}}</view>
-  <view class='selectedView'></view>
-  <input></input>
+    <view class='leftview'>
+      <view class='nameview'>{{item.minName}}</view>
+      <input class='inputview'></input>
+    </view>
+    <view class='rightview'>
+      <view class='lockview'>
+        <image src='/images/control/select_on.png'></image>
+      </view>
+      <view class='timeview'>
+        <view>0.3</view>
+        <view>
+          <view>
+            <image class='zhishiImg' src='/images/control/classify_up.png'></image>
+          </view>
+          <view>
+            <image class='zhishiImg' src='/images/control/classify_down.png'></image>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>
