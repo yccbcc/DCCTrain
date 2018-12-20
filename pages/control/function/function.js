@@ -112,9 +112,9 @@ Page({
     if (value == null || value.length == 0) {
       return;
     }
-    if (value.length > 4) {
+    if (value.length > 6) {
       wx.showToast({
-        title: '名字不能超过四个字符',
+        title: '名字不能超过六个字符',
         icon:'none'
       })
       return e.detail.value.substr(0,4);
