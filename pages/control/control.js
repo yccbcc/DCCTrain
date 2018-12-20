@@ -2,6 +2,7 @@
 
 const app = getApp();
 var bleManager = require('../common/ble/bleManager.js')
+require("../../pages/common/arrayExt.js")
 
 Page({
 
@@ -32,10 +33,9 @@ Page({
 
     isShowCarList: false,
 
-    isLongPress: false,
-
     functionNames: [],
-    functionEditsStatus: [],
+    timeoutArr: [],
+
 
     //车辆选择
     showCars: [],
@@ -44,9 +44,9 @@ Page({
   },
 
   onLoad: function(options) {
+
     //设置ui 以及 当前车辆
     var cars = app.globalData.cars;
-    var showCars = [].concat(cars)
     var car = null;
     for (let i = 0; i < cars.length; i++) {
       var everyCar = cars[i]
@@ -55,28 +55,39 @@ Page({
       }
     }
     this.data.car = car;
-    var functionNames = this.initFunctionNames();
-    var functionEditsStatus = [];
-    for (var i = 1; i <= 28; i++) {
-      functionEditsStatus.push(false)
-    }
-
 
     var middleViewHeight = app.globalData.windowHeight - (this.data.topViewHeight + this.data.bottomViewHeight)
     var functionHeight = (app.globalData.windowHeight - (this.data.topViewHeight + this.data.bottomViewHeight + this.data.middleTopHeight)) / 6 - this.data.functionSpaceHeight;
     var canvasHeight = middleViewHeight - this.data.middleTopHeight - this.data.selectedCarHeight - 20;
     this.setData({
-      functionNames: functionNames,
-      functionEditsStatus: functionEditsStatus,
       canvasHeight: canvasHeight,
       middleViewHeight: middleViewHeight,
       functionBtnHeight: functionHeight,
       cars: cars,
-      showCars: showCars,
-      car: car
     })
   },
-  initFunctionNames: function() {
+  
+  onShow: function() {
+    this.data.timeoutArr = [];
+    for (var i = 0; i <= 28; i++) {
+      this.data.timeoutArr.push(null)
+    }
+    var cars = app.globalData.cars;
+    for (let i = 0; i < cars.length; i++) {
+      var everyCar = cars[i]
+      if (everyCar.isSelected) {
+        this.data.car = everyCar;
+      }
+    }
+    var functionNames = this.initFunctionNames();
+    this.setData({
+      functionNames: functionNames,
+      car: this.data.car,
+    })
+    this.initBle();
+    this.updateSelCar({}, true)
+  },
+  initFunctionNames: function () {
     var functionNames = [];
     var functionKeys = [
       ['F1', 'F2'],
@@ -105,10 +116,6 @@ Page({
       functionNames.push(d)
     }
     return functionNames;
-  },
-  onShow: function() {
-    this.initBle();
-    this.updateSelCar({}, true)
   },
   onHide: function() {
     this.clearBle();
@@ -185,12 +192,13 @@ Page({
 
   //机车列表的展示与隐藏
   showCarsListTap: function() {
-    if (!this.data.isShowCarList){
+    this.data.showCars = this.data.cars
+    if (!this.data.isShowCarList) {
       this.setData({
         isShowCarList: true,
-        showCars:[].concat(this.data.cars)
+        showCars: this.data.showCars
       })
-    }else{
+    } else {
       this.setData({
         isShowCarList: false,
       })
@@ -206,12 +214,10 @@ Page({
       }
     }
     this.setData({
-      showCars: [].concat(showCars)
+      showCars: showCars
     })
   },
-  refreshCarsList: function() {
 
-  },
   //车辆点击事件  改变选中和车辆相关
   cellTap: function(e) {
     var index = e.currentTarget.dataset.index
@@ -222,12 +228,6 @@ Page({
       })
       return;
     }
-    for (var i in this.data.showCars) {
-      var car = this.data.showCars[i];
-      car.isSelected = false;
-    }
-    selCar.isSelected = true;
-
     for (var i in this.data.cars) {
       var car = this.data.cars[i];
       car.isSelected = false;
@@ -236,29 +236,32 @@ Page({
       var car = this.data.cars[i];
       if (car.id == selCar.id) {
         car.isSelected = true;
+        this.data.car = car;
       }
     }
-
-    this.data.car = selCar;
     var functionNames = this.initFunctionNames()
+
     this.setData({
       isShowCarList: false,
-      car: selCar,
+      car: this.data.car,
       cars: this.data.cars,
-      showCars: this.data.showCars,
       functionNames: functionNames
     })
+
     app.globalData.cars = this.data.cars;
     app.globalData.car = selCar;
-    wx.setStorage({
-      key: 'cars',
-      data: this.data.cars,
-    })
+    this.storageCars()
   },
   //功能键复位 ************
   functionResetTap: function() {
+    for (var i = 0; i < this.data.timeoutArr.length; i++) {
+      var timeout = this.data.timeoutArr[i]
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+    }
     var car = this.data.car;
-    for (let i = 0; i <= 32; i++) {
+    for (let i = 0; i <= 28; i++) {
       car[`F${i}`].isSelected = false;
     }
     this.updateSelCar({}, false)
@@ -284,68 +287,19 @@ Page({
     })
   },
 
-
-
   //功能键长恩事件
   functionBtnLongTap: function(e) {
-    var carStr = JSON.stringify(this.data.car)
+    this.functionResetTap();
     wx.navigateTo({
-      url: './function/function?car=' + carStr,
-    })
-    // this.data.isLongPress = true;
-    // var section = e.currentTarget.dataset.sectionindex
-    // var cell = e.currentTarget.dataset.cellindex
-    // var index = section * 2 + cell
-    // this.data.functionEditsStatus[index] = true;
-
-    // this.setData({
-    //   functionEditsStatus: this.data.functionEditsStatus,
-    // })
-
-    // console.log(this.data.functionEditsStatus)
-  },
-  bindconfirm: function(e) {
-    console.log(e)
-    var section = e.currentTarget.dataset.sectionindex
-    var cell = e.currentTarget.dataset.cellindex
-    var index = section * 2 + cell
-    if (e.detail.value && e.detail.value.length > 0) {
-      this.data.car[`F${index}`].name = e.detail.value;
-      var functionNames = this.initFunctionNames();
-      this.setData({
-        functionNames: functionNames
-      })
-      this.updateSelCar({}, true)
-    }
-  },
-  bindblur: function(e) {
-    var section = e.currentTarget.dataset.sectionindex
-    var cell = e.currentTarget.dataset.cellindex
-    var index = section * 2 + cell
-    this.data.functionEditsStatus[index] = false;
-
-    this.setData({
-      functionEditsStatus: this.data.functionEditsStatus,
+      url: './function/function?id=' + this.data.car.id,
     })
   },
 
   //功能键点击事件
   functionBtnTap: function(e) {
-    if (this.data.isLongPress) {
-      this.data.isLongPress = false;
-      return;
-    }
-
     var section = e.currentTarget.dataset.sectionindex
     var cell = e.currentTarget.dataset.cellindex
     var index = section * 2 + cell
-
-    var isEdit = this.data.functionEditsStatus[index]
-    if (isEdit) {
-      return;
-    }
-
-    console.log(index)
     if (index > 28) {
       return;
     }
@@ -355,6 +309,35 @@ Page({
       type: bleManager.type.functionTap_write,
       functionIndex: index
     })
+
+    var lockNum = this.data.car[`F${index}`].lockNum;
+
+    if (lockNum != 0) { //按下. 未锁定有延时
+      if (this.data.car[`F${index}`].isSelected) { //摁下
+      var that = this;
+        var timeout = setTimeout(function() {
+          that.data.car[`F${index}`].isSelected = !that.data.car[`F${index}`].isSelected
+          that.updateSelCar({}, false)
+          bleManager.writeMsg({
+            type: bleManager.type.functionTap_write,
+            functionIndex: index
+          })
+          var timeout1 = that.data.timeoutArr[index]
+          if (timeout1) {
+            clearTimeout(timeout1)
+            that.data.timeoutArr[index] = null;
+          }
+        }, lockNum * 1000)
+        this.data.timeoutArr[index] = timeout;
+      } else { //按键谈起
+        var timeout = this.data.timeoutArr[index]
+        var that = this;
+        if (timeout) {
+          clearTimeout(timeout)
+          that.data.timeoutArr[index] = null;
+        }
+      }
+    }
   },
 
   directionTap: function() {
@@ -465,14 +448,31 @@ Page({
       car: selCar
     })
     if (isNeedStorage) {
-      wx.setStorage({
-        key: 'cars',
-        data: this.data.cars,
-      })
+      this.storageCars()
     }
-
   },
 
+  storageCars: function() {
+    var cars = JSON.parse(JSON.stringify(app.globalData.cars))
+    for (var i = 0; i < cars.length; i++) {
+      var car = cars[i]
+      car.speed = 0;
+      car.register = 1;
+      car.direction = 0;
+      for (let i = 0; i <= 28; i++) {
+        car[`F${i}`].isSelected = false
+      }
+      var dangName = ["IV", "III", "II", "I"]
+      for (let j = 0; j < 4; j++) {
+        var name = dangName[j]
+        car[name].isSelected = false
+      }
+    }
+    wx.setStorage({
+      key: 'cars',
+      data: cars,
+    })
+  },
 
   /**************image相关********* */
 
@@ -489,8 +489,6 @@ Page({
         wx.navigateTo({
           url: `./cut/cut?src=${src}`
         })
-        // that.data.car.image = tempFilePaths[0];
-        // that.updateSelCar({},true)
       }
     })
   },

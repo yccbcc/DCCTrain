@@ -224,8 +224,9 @@ canvas view {
   border: solid 2px lightgray;
   border-radius: 4px;
   box-sizing: border-box;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
+  position: relative;
 }
 
 .functionsBgScrollView {
@@ -246,20 +247,11 @@ canvas view {
   border: solid 2px lightgray;
   border-radius: 4px;
   box-sizing: border-box;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
 }
 
-.functionsBtns>view>input {
-  background: red;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.functionsBtns>view>view {
+.jiaoBiaoView{
   background: white;
   position: absolute;
   bottom: 0;

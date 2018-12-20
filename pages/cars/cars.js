@@ -63,14 +63,14 @@ Page({
       var num = parseInt(Math.random() * 10000 + 1, 10);
       newObj.id = timestamp + num + "";
       
-        
-
       this.data.cars.splice(this.data.currentSel + 1, 0, newObj);
       app.globalData.cars = this.data.cars;
-      wx.setStorageSync('cars', this.data.cars)
+      
       this.setData({
         cars: this.data.cars
       })
+
+      this.storageCars();
 
     } else if (index == 1) { //修改
       if (this.data.currentSel == -1) {
@@ -113,12 +113,13 @@ Page({
       }
       this.data.cars.splice(this.data.currentSel, 1);
       app.globalData.cars = this.data.cars;
-      wx.setStorageSync('cars', this.data.cars)
+      
       this.setData({
         cars: this.data.cars,
         currentSel : -1
       })
       
+      this.storageCars();
     }
   },
 
@@ -130,6 +131,27 @@ Page({
     })
   },
 
+  storageCars: function () {
+    var cars = JSON.parse(JSON.stringify(app.globalData.cars))
+    for (var i = 0; i < cars.length; i++) {
+      var car = cars[i]
+      car.speed = 0;
+      car.register = 1;
+      car.direction = 0;
+      for (let i = 0; i <= 28; i++) {
+        car[`F${i}`].isSelected = false
+      }
+      var dangName = ["IV", "III", "II", "I"]
+      for (let j = 0; j < 4; j++) {
+        var name = dangName[j]
+        car[name].isSelected = false
+      }
+    }
+    wx.setStorage({
+      key: 'cars',
+      data: cars,
+    })
+  },
 
   
 })

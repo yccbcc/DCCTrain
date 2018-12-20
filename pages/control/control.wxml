@@ -50,14 +50,15 @@
               <view>功能键</view>
               <view>复位</view>
             </view>
-            <view bindtap='functionBtnTap' data-sectionindex="{{0}}" data-cellindex="{{0}}" style="background-color:{{car['F0'].isSelected ? 'lightgray' : 'white'}};height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px">F0</view>
+            <view bindtap='functionBtnTap' bindlongpress='functionBtnLongTap' data-sectionindex="{{0}}" data-cellindex="{{0}}" style="background-color:{{car['F0'].isSelected ? 'lightgray' : 'white'}};height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px">{{car['F0'].name}}
+              <view class='jiaoBiaoView' wx:if="{{car['F0'].name != car['F0'].minName}}">{{car['F0'].minName}}</view>
+            </view>
           </view>
           <scroll-view class='functionsBgScrollView' scroll-y style="height:{{middleViewHeight - middleTopHeight - functionBtnHeight - functionSpaceHeight}}px">
             <view class='functionsBtns' wx:key style='height:{{functionBtnHeight}}px;margin-top:{{10}}px' wx:for="{{functionNames}}" wx:for-item="sectionitem" wx:for-index='sectionindex'>
               <view style='background-color:{{car[item.minName].isSelected ? "lightgray" : "white"}};height:{{functionBtnHeight}}px;line-height:{{functionBtnHeight}}px' wx:key wx:for="{{sectionitem}}" data-sectionindex="{{sectionindex}}" data-cellindex="{{index + 1}}"
                 bindtap='functionBtnTap' bindlongpress='functionBtnLongTap'>{{item.name}}
-                <input data-sectionindex="{{sectionindex}}" data-cellindex="{{index + 1}}" wx:if="{{functionEditsStatus[sectionindex * 2 + (index+1)]}}" value='{{item.name}}' bindconfirm='bindconfirm' bindblur="bindblur"></input>
-                <view wx:if="{{item.name != item.minName}}">{{item.minName}}</view>
+                <view class='jiaoBiaoView' wx:if="{{item.name != item.minName}}">{{item.minName}}</view>
               </view>
             </view>
           </scroll-view>

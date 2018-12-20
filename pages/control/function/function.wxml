@@ -1,7 +1,13 @@
 <!--pages/control/function/function.wxml-->
+
+<wxs module="utils">
+  module.exports.twoFixed = function(num) {
+    return num.toFixed(1)
+  }
+</wxs>
 <view class='cell'>
   <view class='leftview'>
-    <view class='nameview'>按钮</view>
+    <view class='nameview topnameview'>按钮</view>
     <view class='inputview'>名称</view>
   </view>
   <view class='rightview'>
@@ -12,20 +18,20 @@
 <view class='tableView'>
   <view class='cell' wx:key wx:for="{{functionArr}}">
     <view class='leftview'>
-      <view class='nameview'>{{item.minName}}</view>
-      <input class='inputview'></input>
+      <view bindtap='nametap' data-index="{{index}}" class='nameview' style="background-color:{{item.isSelected ? 'lightgray' : 'white'}}">{{item.minName}}</view>
+      <input class='inputview' value='{{item.name}}' data-index="{{index}}" bindinput='bindinput'></input>
     </view>
     <view class='rightview'>
-      <view class='lockview'>
-        <image src='/images/control/select_on.png'></image>
+      <view class='lockview' bindtap='locktap' data-index="{{index}}">
+        <image src="{{item.lockNum == 0 ? '/images/control/select_on.png' : '/images/control/select_off.png'}}"></image>
       </view>
       <view class='timeview'>
-        <view>0.3</view>
+        <view>{{item.lockNum}}</view>
         <view>
-          <view>
+          <view bindtap='uptap' data-index="{{index}}">
             <image class='zhishiImg' src='/images/control/classify_up.png'></image>
           </view>
-          <view>
+          <view data-index="{{index}}" bindtap='downtap'>
             <image class='zhishiImg' src='/images/control/classify_down.png'></image>
           </view>
         </view>

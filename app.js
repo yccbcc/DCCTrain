@@ -3,7 +3,7 @@
 App({
 
   onLaunch: function() {
-    
+
     var model = wx.getSystemInfoSync().model
     this.globalData.isiPhone = model.substr(0, 6) == 'iPhone'
     this.globalData.windowWidth = wx.getSystemInfoSync().windowWidth
@@ -11,12 +11,11 @@ App({
 
     var cars = wx.getStorageSync('cars')
     if (cars) {
-
       for (var i in cars) {
         var everyCar = cars[i]
         everyCar.speed = 0;
         everyCar.direction = 0;
-        for (let i = 0; i <= 32; i++) {
+        for (let i = 0; i <= 28; i++) {
           everyCar[`F${i}`].isSelected = false
         }
         var dangName = ["IV", "III", "II", "I"]
@@ -26,9 +25,7 @@ App({
           var value = dangValue[3 - j]
           everyCar[name].isSelected = false
         }
-
       }
-
       this.globalData.cars = cars;
       for (let i in cars) {
         var car = cars[0]
@@ -39,12 +36,12 @@ App({
     } else {
       for (var j in this.globalData.defCars) {
         var defCar = this.globalData.defCars[j];
-        for (let i = 0; i <= 32; i++) {
+        for (let i = 0; i <= 28; i++) {
           defCar[`F${i}`] = {
             name: `F${i}`,
             isSelected: false,
             minName: 'F' + i,
-            lockNum:0,
+            lockNum: 0.0,
           }
         }
         var dangName = ["IV", "III", "II", "I"]
@@ -136,7 +133,7 @@ App({
         'cab': '3', //机车地址
         'maxSpeed': 126, //最高速度
         //'I': { name: 'I', value: 25, isSelected: false}
-        // 'F0': { 'name': 'F0', isSelected:false} // f0 - f32
+        // 'F0': { 'name': 'F0', isSelected:false} // f0 - f28
       }
     ]
   }

@@ -1,6 +1,6 @@
 module.exports = {
 
-  //截取两个字符之间的字符 并返回  🌰 "0><a><b><c" => "<c"   arr = ["<a>","<b>"]
+  //截取两个字符之间的字符 并返回  🌰 "0><a><b><c" "<" ">" [] => return: "<c"   arr = ["<a>","<b>"]
   cutstr: function(text, start, end, arr) {
     var s = text.indexOf(start)
     if (s > -1) {

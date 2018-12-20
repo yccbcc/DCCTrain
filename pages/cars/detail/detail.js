@@ -135,7 +135,7 @@ Page({
       }
       value.maxSpeed = parseInt(value.maxSpeed)
 
-      for (let i = 0; i <= 32; i++) {
+      for (let i = 0; i <= 28; i++) {
         value['F' + i] = {
           name: 'F' + i,
           isSelected: false,
@@ -168,7 +168,8 @@ Page({
 
     app.globalData.cars = theCars;
 
-    wx.setStorageSync('cars', theCars)
+    this.storageCars();
+    
     wx.showToast({
       title: '操作成功',
       icon: 'none'
@@ -348,5 +349,28 @@ Page({
       }
     }
     return resultArr;
+  },
+
+  
+  storageCars: function () {
+    var cars = JSON.parse(JSON.stringify(app.globalData.cars))
+    for (var i = 0; i < cars.length; i++) {
+      var car = cars[i]
+      car.speed = 0;
+      car.register = 1;
+      car.direction = 0;
+      for (let i = 0; i <= 28; i++) {
+        car[`F${i}`].isSelected = false
+      }
+      var dangName = ["IV", "III", "II", "I"]
+      for (let j = 0; j < 4; j++) {
+        var name = dangName[j]
+        car[name].isSelected = false
+      }
+    }
+    wx.setStorage({
+      key: 'cars',
+      data: cars,
+    })
   },
 })

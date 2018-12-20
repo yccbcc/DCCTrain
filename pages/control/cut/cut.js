@@ -1,5 +1,6 @@
 import WeCropper from '../../../we-cropper/we-cropper.js'
 
+var app = getApp()
 const device = wx.getSystemInfoSync()
 const width = device.windowWidth
 const height = device.windowHeight - 50
@@ -36,10 +37,26 @@ Page({
         var pages = getCurrentPages()
         var controlPage = pages[pages.length - 2];
         controlPage.data.car.image = avatar
+
+        for (var i = 0; i < controlPage.data.cars.length; i++) {
+          var car = controlPage.data.cars[i]
+          if (car.isSelected) {
+            car.image = avatar;
+          }
+        }
+
+        for (var i = 0; i < app.globalData.cars.length; i++) {
+          var car = app.globalData.cars[i]
+          if (car.isSelected) {
+            car.image = avatar;
+          }
+        }
+
+        this.storageCars()
+
         //console.log(pages)
         //  获取到裁剪后的图片
-        wx.navigateBack({
-        })
+        wx.navigateBack({})
       } else {
         console.log('获取图片失败，请稍后重试')
       }
@@ -60,7 +77,9 @@ Page({
     })
   },
   onLoad(option) {
-    const { cropperOpt } = this.data
+    const {
+      cropperOpt
+    } = this.data
 
     if (option.src) {
       cropperOpt.src = option.src
@@ -88,5 +107,26 @@ Page({
         })
         .updateCanvas()
     }
-  }
+  },
+  storageCars: function() {
+    var cars = JSON.parse(JSON.stringify(app.globalData.cars))
+    for (var i = 0; i < cars.length; i++) {
+      var car = cars[i]
+      car.speed = 0;
+      car.register = 1;
+      car.direction = 0;
+      for (let i = 0; i <= 28; i++) {
+        car[`F${i}`].isSelected = false
+      }
+      var dangName = ["IV", "III", "II", "I"]
+      for (let j = 0; j < 4; j++) {
+        var name = dangName[j]
+        car[name].isSelected = false
+      }
+    }
+    wx.setStorage({
+      key: 'cars',
+      data: cars,
+    })
+  },
 })
