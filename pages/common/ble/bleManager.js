@@ -6,7 +6,7 @@ const manager = {
   maxNum: 999,
   type: {
     none: -1,
-    electricCheck_write: 1, //检测电源 <c>
+    electricCheck_write: 1, //检测电源  <c>
     electricCheck_read: 2, //返回<axxx> xxx/1000
     electricStop_write: 3, //关闭电源 <1>
     electricStop_read: 4, //返回 <p1>  短路<p2> <p3> 放在哪???

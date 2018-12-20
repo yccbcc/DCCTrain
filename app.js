@@ -8,7 +8,7 @@ App({
     this.globalData.isiPhone = model.substr(0, 6) == 'iPhone'
     this.globalData.windowWidth = wx.getSystemInfoSync().windowWidth
     this.globalData.windowHeight = wx.getSystemInfoSync().windowHeight
-
+// console.log(this.globalData.windowWidth)
     var cars = wx.getStorageSync('cars')
     if (cars) {
       for (var i in cars) {

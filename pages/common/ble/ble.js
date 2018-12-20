@@ -7,7 +7,8 @@ function inArray(arr, key, val) {
   return -1;
 }
 
-// ArrayBuffer转16进度字符串示例
+// ArrayBuffer 转16进度字符串示例
+
 function ab2hex(buffer) {
   var hexArr = Array.prototype.map.call(
     new Uint8Array(buffer),

@@ -227,6 +227,10 @@ canvas view {
   font-size: 16px;
   text-align: center;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .functionsBgScrollView {
@@ -249,6 +253,10 @@ canvas view {
   box-sizing: border-box;
   font-size: 16px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .jiaoBiaoView{

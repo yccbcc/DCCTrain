@@ -1,4 +1,4 @@
-// pages/ble/ble.js
+//  apages/ble/ble.js
 
 var bleManager = require("../common/ble/bleManager.js")
 const app = getApp()

@@ -11,6 +11,8 @@ Page({
    */
   data: {
 
+    windowWidth:0,
+
     //top电源相关
     electricTxt: '0',
     connected: false,
@@ -45,6 +47,8 @@ Page({
 
   onLoad: function(options) {
 
+var windowWidth = app.globalData.windowWidth;
+
     //设置ui 以及 当前车辆
     var cars = app.globalData.cars;
     var car = null;
@@ -63,6 +67,7 @@ Page({
       canvasHeight: canvasHeight,
       middleViewHeight: middleViewHeight,
       functionBtnHeight: functionHeight,
+      windowWidth: windowWidth,
       cars: cars,
     })
   },
