@@ -39,7 +39,6 @@ Page({
     timeoutArr: [],
 
 
-    //车辆选择
     showCars: [],
     cars: null,
     car: null,
