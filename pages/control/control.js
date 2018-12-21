@@ -482,15 +482,13 @@ var windowWidth = app.globalData.windowWidth;
   /**************image相关********* */
 
   imageTap() {
-    var that = this;
     wx.chooseImage({
-      count: 1,
-      sizeType: ['original'],
-      sourceType: ['album', 'camera'],
+      count: 1, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success(res) {
-        // tempFilePath可以作为img标签的src属性显示图片
-        const tempFilePaths = res.tempFilePaths
-        var src = tempFilePaths[0]
+        const src = res.tempFilePaths[0]
+        console.log(src)
         wx.navigateTo({
           url: `./cut/cut?src=${src}`
         })

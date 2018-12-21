@@ -10,7 +10,7 @@
 		"minified": true,
 		"newFeature": true,
 		"autoAudits": false,
-		"uglifyFileName": true
+		"uglifyFileName": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.4.1",
