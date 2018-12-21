@@ -7,7 +7,7 @@ require("../../pages/common/arrayExt.js")
 Page({
 
   /**
-   * 页面的初始数据
+   * 页面的初始数据 1
    */
   data: {
 
