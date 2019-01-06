@@ -35,29 +35,25 @@ Page({
       if (avatar) {
 
         console.log('获取图片成功')
+var that = this;
+        wx.saveFile({
+          tempFilePath: avatar,
+          success(res) {
+            const savedFilePath = res.savedFilePath
 
-        var pages = getCurrentPages()
-        // var controlPage = pages[pages.length - 2];
-        // controlPage.data.car.image = avatar
-
-        // for (var i = 0; i < controlPage.data.cars.length; i++) {
-        //   var car = controlPage.data.cars[i]
-        //   if (car.isSelected) {
-        //     car.image = avatar;
-        //   }
-        // }
-
-        for (var i = 0; i < app.globalData.cars.length; i++) {
-          var car = app.globalData.cars[i]
-          if (car.isSelected) {
-            car.image = avatar;
+            for (var i = 0; i < app.globalData.cars.length; i++) {
+              var car = app.globalData.cars[i]
+              if (car.isSelected) {
+                car.image = savedFilePath;
+              }
+            }
+            that.storageCars()
+            wx.navigateBack({})
           }
-        }
+        })
 
-        this.storageCars()
+        
 
-        //  获取到裁剪后的图片
-        wx.navigateBack({})
       } else {
         console.log('获取图片失败，请稍后重试')
       }

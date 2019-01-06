@@ -252,12 +252,17 @@ var windowWidth = app.globalData.windowWidth;
       functionNames: functionNames
     })
 
+    this.stopTap();
     app.globalData.cars = this.data.cars;
     app.globalData.car = selCar;
     this.storageCars()
   },
   //功能键复位 ************
   functionResetTap: function() {
+    var isDianYuan = this.isLianjieDianyuan()
+    if(!isDianYuan){
+      return;
+    }
     for (var i = 0; i < this.data.timeoutArr.length; i++) {
       var timeout = this.data.timeoutArr[i]
       if (timeout) {
@@ -301,6 +306,10 @@ var windowWidth = app.globalData.windowWidth;
 
   //功能键点击事件
   functionBtnTap: function(e) {
+    var isDianYuan = this.isLianjieDianyuan()
+    if (!isDianYuan) {
+      return;
+    }
     var section = e.currentTarget.dataset.sectionindex
     var cell = e.currentTarget.dataset.cellindex
     var index = section * 2 + cell
@@ -352,10 +361,18 @@ var windowWidth = app.globalData.windowWidth;
 
   // 滑块事件
   bindtouchstart: function(e) {
+    var isDianYuan = this.isLianjieDianyuan()
+    if (!isDianYuan) {
+      return;
+    }
     var y = e.changedTouches[0].y;
     this.handleSlidY(y, false)
   },
   bindtouchmove: function(e) {
+    var isDianYuan = this.isLianjieDianyuan()
+    if (!isDianYuan) {
+      return;
+    }
     var y = e.changedTouches[0].y;
     if (y < 0) {
       y = 0
@@ -371,13 +388,25 @@ var windowWidth = app.globalData.windowWidth;
 
   //下方功能键
   stopTap: function() {
+    var isDianYuan = this.isLianjieDianyuan()
+    if (!isDianYuan) {
+      return;
+    }
     this.handleSlidY(this.data.canvasHeight, false)
   },
   soonStopTap: function() {
+    var isDianYuan = this.isLianjieDianyuan()
+    if (!isDianYuan) {
+      return;
+    }
     this.handleSlidY(-1, true)
   },
 
   directionTap: function() {
+    var isDianYuan = this.isLianjieDianyuan()
+    if (!isDianYuan) {
+      return;
+    }
     this.data.car.direction = this.data.car.direction == 0 ? 1 : 0;
     this.updateSelCar({}, false)
     this.writeSpeed(this.data.car.speed)
@@ -403,6 +432,10 @@ var windowWidth = app.globalData.windowWidth;
   },
   //档位变化
   dangWeiClick: function(e) {
+    var isDianYuan = this.isLianjieDianyuan()
+    if (!isDianYuan) {
+      return;
+    }
     var index = e.currentTarget.dataset.index
     var names = this.data.dangWeiNames
     var name = names[index]
@@ -476,6 +509,25 @@ var windowWidth = app.globalData.windowWidth;
       key: 'cars',
       data: cars,
     })
+  },
+
+  isLianjieBle:function(){
+    if (!app.globalData.connected) {
+      wx.showToast({
+        title: '请连接蓝牙',
+        icon: 'none'
+      })
+      return false;
+    }
+  },
+  isLianjieDianyuan:function(){
+    if (!app.globalData.electriced) {
+      wx.showToast({
+        title: '请接通电源',
+        icon: 'none'
+      })
+      return false;
+    }
   },
 
   /**************image相关********* */

@@ -154,7 +154,7 @@ const manager = {
           title: '请连接蓝牙',
           icon: 'none'
         })
-        // return;
+        return;
       }
       if (e.type == this.type.electricStop_write) {
         msg = "<0>"
@@ -166,7 +166,7 @@ const manager = {
             title: '请接通电源',
             icon: 'none'
           })
-          // return;
+          return;
         }
         if (e.type == this.type.speedChange_write) {
           //  这里的/速度/不做处理 需要控制器处理好,发过来. -1急停 0停止 ridection:方向 0右1左

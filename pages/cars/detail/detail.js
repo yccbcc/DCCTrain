@@ -140,6 +140,7 @@ Page({
           name: 'F' + i,
           isSelected: false,
           minName: 'F' + i,
+          lockNum:0.0
         };
       }
       app.globalData.cars.push(value);
