@@ -60,6 +60,10 @@ const ble = {
               this.startBluetoothDevicesDiscovery()
             }
           })
+          wx.showToast({
+            title: '请打开蓝牙',
+            icon: 'none'
+          })
         }
       }
     })

@@ -519,6 +519,7 @@ var windowWidth = app.globalData.windowWidth;
       })
       return false;
     }
+    return true;
   },
   isLianjieDianyuan:function(){
     if (!app.globalData.electriced) {
@@ -528,6 +529,7 @@ var windowWidth = app.globalData.windowWidth;
       })
       return false;
     }
+    return true;
   },
 
   /**************image相关********* */
