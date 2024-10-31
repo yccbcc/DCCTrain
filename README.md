@@ -3,4 +3,4 @@
 
 通过蓝牙控制火车模型.
 
-cehsi sss
+cehsi
